@@ -1,0 +1,54 @@
+{
+    "name": "via-work/lever-php",
+    "description": "Super-simple, minimum abstraction Lever DATA API v3 wrapper in PHP with support for Laravel.",
+    "keywords": [
+        "via-work",
+        "lever-php"
+    ],
+    "homepage": "https://github.com/via-work/lever-php",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Via.work",
+            "email": "dev@via.work",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.3",
+        "illuminate/support": "^6.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^4.0",
+        "phpunit/phpunit": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ViaWork\\LeverPhp\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ViaWork\\LeverPhp\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ViaWork\\LeverPhp\\LeverPhpServiceProvider"
+            ],
+            "aliases": {
+                "LeverPhp": "ViaWork\\LeverPhp\\LeverPhpFacade"
+            }
+        }
+    }
+}
