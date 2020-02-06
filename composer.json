@@ -17,6 +17,8 @@
     ],
     "require": {
         "php": "^7.3",
+        "graham-campbell/guzzle-factory": "^4.0",
+        "guzzlehttp/guzzle": "^7.0",
         "illuminate/support": "^6.0"
     },
     "require-dev": {
@@ -50,5 +52,7 @@
                 "LeverPhp": "ViaWork\\LeverPhp\\LeverPhpFacade"
             }
         }
-    }
+    },
+    "prefer-stable": true,
+    "minimum-stability": "dev"
 }
