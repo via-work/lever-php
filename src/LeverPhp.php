@@ -3,6 +3,7 @@
 namespace ViaWork\LeverPhp;
 
 use GuzzleHttp\Client as GuzzleClient;
+use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\ClientException;
 use GrahamCampbell\GuzzleFactory\GuzzleFactory;
@@ -29,15 +30,15 @@ class LeverPhp
 
         // TODO pass RateLimiterMiddleware, check if compatible with exponential backoff
         $this->client = $client ?? GuzzleFactory::make(
-            [
-                'base_uri' => 'https://api.lever.co/v1',
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Content-Type' => 'application/json',
-                    'Authorization' => "Basic $leverKey",
+                [
+                    'base_uri' => 'https://api.lever.co/v1',
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/json',
+                        'Authorization' => "Basic $leverKey",
+                    ]
                 ]
-            ]
-        );
+            );
     }
 
     private function post(string $endpoint, $body = ''): ResponseInterface
@@ -53,7 +54,7 @@ class LeverPhp
         return $response;
     }
 
-    private function get(string $endpoint, $body = ''): ResponseInterface
+    private function get(string $endpoint): ResponseInterface
     {
         try {
             $response = $this->client->get($this->createEndpoint($endpoint));
@@ -109,6 +110,15 @@ class LeverPhp
     public function client(): GuzzleClient
     {
         return $this->client;
+    }
+
+    public function opportunities(): Collection
+    {
+        $response = $this->get('opportunities')->getBody()->getContents();
+
+        return new Collection(
+            json_decode($response, true)['data']
+        );
     }
 
 
