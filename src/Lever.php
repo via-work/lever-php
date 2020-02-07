@@ -21,13 +21,14 @@ class Lever
     /**
      * Lever constructor.
      * @param string $leverKey
+     * @param GuzzleClient|null $client
      */
-    public function __construct(string $leverKey)
+    public function __construct(string $leverKey, GuzzleClient $client = null)
     {
         $this->leverKey = $leverKey;
 
         // TODO pass RateLimiterMiddleware, check if compatible with exponential backoff
-        $this->client = GuzzleFactory::make(
+        $this->client = $client ?? GuzzleFactory::make(
             [
                 'base_uri' => 'https://api.lever.co/v1',
                 'headers' => [
