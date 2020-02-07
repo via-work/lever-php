@@ -54,7 +54,7 @@
                 "ViaWork\\LeverPhp\\LeverPhpServiceProvider"
             ],
             "aliases": {
-                "LeverPhp": "ViaWork\\LeverPhp\\LeverPhpFacade"
+                "Lever": "ViaWork\\LeverPhp\\Facade\\Lever"
             }
         }
     }

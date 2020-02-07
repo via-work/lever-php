@@ -1,13 +1,13 @@
 <?php
 
-namespace ViaWork\LeverPhp;
+namespace ViaWork\LeverPhp\Facade;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
  * @see \ViaWork\LeverPhp\LeverPhp
  */
-class LeverPhpFacade extends Facade
+class Lever extends Facade
 {
     /**
      * Get the registered name of the component.

@@ -16,7 +16,7 @@ class LeverPhpServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/config.php' => config_path('lever-php.php'),
+                __DIR__ . '/../config/config.php' => config_path('lever-php.php'),
             ], 'config');
 
             // Registering package commands.
@@ -30,10 +30,10 @@ class LeverPhpServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'lever');
+        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'lever');
 
         // Register the main class to use with the facade
-        $this->app->singleton('lever-php', function () {
+        $this->app->singleton('lever-php', static function () {
             return new LeverPhp(config('lever.key'));
         });
     }
