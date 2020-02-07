@@ -2,6 +2,7 @@
 
 namespace ViaWork\LeverPhp;
 
+use ViaWork\LeverPhp\Facade\Lever;
 use Illuminate\Support\ServiceProvider;
 
 class LeverPhpServiceProvider extends ServiceProvider
@@ -36,5 +37,7 @@ class LeverPhpServiceProvider extends ServiceProvider
         $this->app->singleton('lever-php', static function () {
             return new LeverPhp(config('lever.key'));
         });
+
+        $this->app->alias(Lever::class, 'newsletter');
     }
 }
