@@ -1,9 +1,11 @@
 {
     "name": "via-work/lever-php",
-    "description": "Super-simple, minimum abstraction Lever DATA API v3 wrapper in PHP with support for Laravel.",
+    "description": "Super-simple, minimum abstraction Lever DATA API v1 wrapper in PHP with support for Laravel.",
     "keywords": [
-        "via-work",
-        "lever-php"
+        "Lever",
+        "Wrapper",
+        "Data API",
+        "Jobs"
     ],
     "homepage": "https://github.com/via-work/lever-php",
     "license": "MIT",
