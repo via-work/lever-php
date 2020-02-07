@@ -10,8 +10,13 @@
     "type": "library",
     "authors": [
         {
-            "name": "Via.work",
-            "email": "dev@via.work",
+            "name": "Omar Sánchez",
+            "email": "omar@via.work",
+            "role": "Developer"
+        },
+        {
+            "name": "Alfonso Strotgen",
+            "email": "alfonso@via.work",
             "role": "Developer"
         }
     ],
