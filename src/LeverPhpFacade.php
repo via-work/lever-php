@@ -5,7 +5,7 @@ namespace ViaWork\LeverPhp;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \ViaWork\LeverPhp\Skeleton\SkeletonClass
+ * @see \ViaWork\LeverPhp\Lever
  */
 class LeverPhpFacade extends Facade
 {
@@ -16,6 +16,6 @@ class LeverPhpFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'lever-php';
+        return 'lever';
     }
 }

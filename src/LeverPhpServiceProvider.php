@@ -11,33 +11,13 @@ class LeverPhpServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        /*
-         * Optional methods to load your package assets
-         */
-        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'lever-php');
-        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'lever-php');
-        // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
         // $this->loadRoutesFrom(__DIR__.'/routes.php');
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/config.php' => config_path('lever-php.php'),
             ], 'config');
-
-            // Publishing the views.
-            /*$this->publishes([
-                __DIR__.'/../resources/views' => resource_path('views/vendor/lever-php'),
-            ], 'views');*/
-
-            // Publishing assets.
-            /*$this->publishes([
-                __DIR__.'/../resources/assets' => public_path('vendor/lever-php'),
-            ], 'assets');*/
-
-            // Publishing the translation files.
-            /*$this->publishes([
-                __DIR__.'/../resources/lang' => resource_path('lang/vendor/lever-php'),
-            ], 'lang');*/
 
             // Registering package commands.
             // $this->commands([]);
@@ -50,11 +30,11 @@ class LeverPhpServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'lever-php');
+        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'lever');
 
         // Register the main class to use with the facade
-        $this->app->singleton('lever-php', function () {
-            return new LeverPhp;
+        $this->app->singleton(Lever::class, function () {
+            return new Lever(config('lever.key'));
         });
     }
 }
