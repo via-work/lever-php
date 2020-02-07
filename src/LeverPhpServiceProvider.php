@@ -33,8 +33,8 @@ class LeverPhpServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'lever');
 
         // Register the main class to use with the facade
-        $this->app->singleton(Lever::class, function () {
-            return new Lever(config('lever.key'));
+        $this->app->singleton('lever-php', function () {
+            return new LeverPhp(config('lever.key'));
         });
     }
 }

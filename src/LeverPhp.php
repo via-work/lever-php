@@ -7,7 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\ClientException;
 use GrahamCampbell\GuzzleFactory\GuzzleFactory;
 
-class Lever
+class LeverPhp
 {
     /** @var string */
     private $leverKey;
@@ -19,7 +19,7 @@ class Lever
     private $queryParameters = '';
 
     /**
-     * Lever constructor.
+     * LeverPhp constructor.
      * @param string $leverKey
      * @param GuzzleClient|null $client
      */
