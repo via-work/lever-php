@@ -31,12 +31,12 @@ class LeverPhp
         // TODO pass RateLimiterMiddleware, check if compatible with exponential backoff
         $this->client = $client ?? GuzzleFactory::make(
                 [
-                    'base_uri' => 'https://api.lever.co/v1',
+                    'base_uri' => 'https://api.lever.co/v1/',
                     'headers' => [
                         'Accept' => 'application/json',
                         'Content-Type' => 'application/json',
-                        'Authorization' => "Basic $leverKey",
-                    ]
+                    ],
+                    'auth' => [$leverKey, '']
                 ]
             );
     }
@@ -96,17 +96,11 @@ class LeverPhp
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function leverKey(): string
     {
         return $this->leverKey;
     }
 
-    /**
-     * @return GuzzleClient
-     */
     public function client(): GuzzleClient
     {
         return $this->client;
