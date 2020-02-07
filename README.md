@@ -5,7 +5,7 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/via-work/lever-php.svg?style=flat-square)](https://scrutinizer-ci.com/g/via-work/lever-php)
 [![Total Downloads](https://img.shields.io/packagist/dt/via-work/lever-php.svg?style=flat-square)](https://packagist.org/packages/via-work/lever-php)
 
-Super-simple, minimum abstraction Lever DATA API v3 wrapper in PHP with support for Laravel.
+Super-simple, minimum abstraction Lever Data API v1 wrapper in PHP with support for Laravel.
 
 ## Installation
 
@@ -17,9 +17,28 @@ composer require via-work/lever-php
 
 ## Usage
 
+#### PHP
+
 ``` php
- Lever::api();
+use \ViaWork\LeverPhp\LeverPhp;
+
+$lever = new LeverPhp('leverKey');
+
+$lever->candidates()
 ```
+
+#### Laravel
+
+After installing, the package will automatically register its service provider.
+
+To publish the config file to config/lever-php.php run:
+
+``` php
+php artisan vendor:publish --provider="ViaWork\LeverPhp\LeverPhpServiceProvider"
+```
+
+Change your API keys accordingly.
+
 
 ### Testing
 
