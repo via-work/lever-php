@@ -73,7 +73,7 @@ class LeverPhp
     public function expand($expandables)
     {
         if (is_array($expandables)) {
-            $this->queryParameters = '?' . implode('expand=', $expandables);
+            $this->queryParameters = '?expand=' . implode('&expand=', $expandables);
         }
 
         if (is_string($expandables)) {
@@ -86,7 +86,7 @@ class LeverPhp
     public function include($includables)
     {
         if (is_array($includables)) {
-            $this->queryParameters = '?' . implode('include=', $includables);
+            $this->queryParameters = '?include=' . implode('&include=', $includables);
         }
 
         if (is_string($includables)) {
