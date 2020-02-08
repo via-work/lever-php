@@ -16,8 +16,8 @@ class LeverPhp
     /** @var GuzzleClient */
     private $client;
 
-    /** @var string */
-    private $queryParameters = '';
+    /** @var array */
+    private $queryParameters = ['query' => []];
 
     /**
      * LeverPhp constructor.
@@ -57,7 +57,7 @@ class LeverPhp
     private function get(string $endpoint): ResponseInterface
     {
         try {
-            $response = $this->client->get($this->createEndpoint($endpoint));
+            $response = $this->client->get($endpoint, $this->queryParameters);
         } catch (ClientException $exception) {
             throw $exception;
         }
@@ -65,32 +65,20 @@ class LeverPhp
         return $response;
     }
 
-    private function createEndpoint($endpoint)
-    {
-        return $endpoint . $this->queryParameters;
-    }
 
-    public function expand($expandables)
+    public function expand($expandable)
     {
-        if (is_array($expandables)) {
-            $this->queryParameters = '?expand=' . implode('&expand=', $expandables);
-        }
-
-        if (is_string($expandables)) {
-            $this->queryParameters = "?expand=$expandables";
+        if (is_string($expandable)) {
+            $this->queryParameters['query']['expand'] = $expandable;
         }
 
         return $this;
     }
 
-    public function include($includables)
+    public function include($includable)
     {
-        if (is_array($includables)) {
-            $this->queryParameters = '?include=' . implode('&include=', $includables);
-        }
-
-        if (is_string($includables)) {
-            $this->queryParameters = "?include=$includables";
+        if (is_string($includable)) {
+            $this->queryParameters['query']['include'] = $includable;
         }
 
         return $this;
