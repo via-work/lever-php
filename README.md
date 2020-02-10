@@ -90,6 +90,12 @@ Lever::postings('730e37db-93d3-4acf-b9de-7cfc397cef1d')
 
 Be aware of the resources that require some parameters to work. When creating a posting for example, the _perform_as_ parameter is required. You can pass this information with the `performAs($userId)` method.
 
+When a resource depends on another one to work, you can simply chain the methods (order is important). For example, to retrieve the **offers** of a **opportunity**, you should execute this:
+
+``` php
+Lever::opportunities('250d8f03-738a-4bba-a671-8a3d73477145')->offers()->fetch();
+```
+
 #### Pagination
 
 All Lever resources with a list endpoint (candidates, users, postings) have pagination and a max limit of 100 results per page. LeverPhp handles this automatically leveraging Laravel [LazyCollection](https://laravel.com/docs/6.x/collections#lazy-collections) class. For example, you can iterate over the whole set of Opportunities without worrying about pagination:
