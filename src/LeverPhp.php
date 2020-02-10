@@ -16,9 +16,6 @@ class LeverPhp
     /** @var string */
     private $endpoint = '';
 
-    /** @var string */
-    private $method = 'get';
-
     /** @var GuzzleClient */
     private $client;
 
@@ -47,7 +44,7 @@ class LeverPhp
             );
     }
 
-    private function post($body = ''): ResponseInterface
+    private function post(array $body): ResponseInterface
     {
         try {
             $response = $this->client->post($this->endpoint, [
@@ -111,15 +108,33 @@ class LeverPhp
     public function opportunities()
     {
         $this->endpoint = 'opportunities';
-        $this->method = 'get';
 
         return $this;
+    }
+
+    public function opportunity(string $opportunityId)
+    {
+        $this->endpoint = 'opportunities/' . $opportunityId;
+
+        return $this;
+    }
+
+    public function create(array $body): array
+    {
+        $response = $this->responseToArray($this->post($body));
+
+        return $response['data'];
+    }
+
+    public function update(array $body): array
+    {
+        return $this->create($body);
     }
 
     /** @return LazyCollection|array */
     public function fetch()
     {
-        $response = $this->responseToArray($this->{$this->method}());
+        $response = $this->responseToArray($this->get());
 
         if (!array_key_exists('hasNext', $response)) {
             return $response['data'];
@@ -133,7 +148,7 @@ class LeverPhp
 
                 if (!empty($response['next'])) {
                     $response = $this->responseToArray(
-                        $this->addParameter('offset', $response['next'])->{$this->method}()
+                        $this->addParameter('offset', $response['next'])->get()
                     );
                 }
 
