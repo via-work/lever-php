@@ -109,7 +109,8 @@ class LeverPhp
         return $this;
     }
 
-    public function fetch(): LazyCollection
+    /** @return LazyCollection|array */
+    public function fetch()
     {
         $response = $this->responseToArray($this->{$this->method}());
 
@@ -117,22 +118,21 @@ class LeverPhp
             return $response['data'];
         }
 
-
         return LazyCollection::make(function () use ($response) {
-
             do {
                 foreach ($response['data'] as $item) {
                     yield $item;
                 }
 
-                $nextToken = $response['next'] ?? '';
 
-                $response = $this->responseToArray(
-                    $this->addQueryString('offset', $nextToken)->{$this->method}()
-                );
+                if (!empty($response['next'])) {
+                    $response = $this->responseToArray(
+                        $this->addQueryString('offset', $response['next'])->{$this->method}()
+                    );
+                }
 
-            } while ((boolean)$response['hasNext']);
 
+            } while (count($response['data']) > 0);
         });
     }
 
