@@ -3,7 +3,7 @@
 namespace ViaWork\LeverPhp;
 
 use GuzzleHttp\Client as GuzzleClient;
-use Illuminate\Support\Collection;
+use Illuminate\Support\LazyCollection;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\ClientException;
 use GrahamCampbell\GuzzleFactory\GuzzleFactory;
@@ -66,19 +66,20 @@ class LeverPhp
     }
 
 
-    public function expand($expandable)
+    public function expand(string $expandable)
     {
-        if (is_string($expandable)) {
-            $this->queryParameters['query']['expand'] = $expandable;
-        }
-
-        return $this;
+        return $this->addQueryString('expand', $expandable);
     }
 
-    public function include($includable)
+    public function include(string $includable)
     {
-        if (is_string($includable)) {
-            $this->queryParameters['query']['include'] = $includable;
+        return $this->addQueryString('include', $includable);
+    }
+
+    public function addQueryString(string $field, string $value)
+    {
+        if (!empty($field) && !empty($value)) {
+            $this->queryParameters['query'][$field] = $value;
         }
 
         return $this;
@@ -94,13 +95,31 @@ class LeverPhp
         return $this->client;
     }
 
-    public function opportunities(): Collection
+    public function opportunities(): LazyCollection
     {
-        $response = $this->get('opportunities')->getBody()->getContents();
+        return LazyCollection::make(function () {
 
-        return new Collection(
-            json_decode($response, true)['data']
-        );
+            $nextToken = '';
+
+            do {
+                $response = $this->responseToArray(
+                    $this->addQueryString('offset', $nextToken)->get('opportunities')
+                );
+
+                foreach ($response['data'] as $item) {
+                    yield $item;
+                }
+
+                $nextToken = $response['next'] ?? '';
+
+            } while ($response['hasNext']);
+
+        });
+    }
+
+    private function responseToArray(ResponseInterface $response)
+    {
+        return json_decode($response->getBody()->getContents(), true);
     }
 
 
