@@ -2,6 +2,7 @@
 
 namespace ViaWork\LeverPhp;
 
+use Exception;
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\LazyCollection;
 use Psr\Http\Message\ResponseInterface;
@@ -108,6 +109,18 @@ class LeverPhp
     public function client(): GuzzleClient
     {
         return $this->client;
+    }
+
+    public function offers()
+    {
+        $regex = '^opportunities/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$';
+        if (preg_match($regex, $this->endpoint) === 0){
+            throw new Exception('Did not chain methods in correct order.');
+        }
+
+        $this->endpoint .= '/offers';
+
+        return $this;
     }
 
     public function opportunities(string $opportunityId = '')
