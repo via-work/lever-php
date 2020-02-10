@@ -74,6 +74,11 @@ class LeverPhp
         return $this->addParameter('expand', $expandable);
     }
 
+    public function performAs(string $userId)
+    {
+        return $this->addParameter('perform_as', $userId);
+    }
+
     public function include(string $includable)
     {
         return $this->addParameter('include', $includable);
@@ -105,14 +110,7 @@ class LeverPhp
         return $this->client;
     }
 
-    public function opportunities()
-    {
-        $this->endpoint = 'opportunities';
-
-        return $this;
-    }
-
-    public function opportunity(string $opportunityId)
+    public function opportunities(string $opportunityId = '')
     {
         $this->endpoint = 'opportunities/' . $opportunityId;
 
@@ -159,6 +157,16 @@ class LeverPhp
     private function responseToArray(ResponseInterface $response): array
     {
         return json_decode($response->getBody()->getContents(), true);
+    }
+
+    public function yes()
+    {
+        [
+            'name' => 'Shane Smith',
+            'headline' => 'Brickly LLC, Vandelay Industries, Inc, Central Perk',
+            'stage' => '00922a60-7c15-422b-b086-f62000824fd7',
+            ...
+        ];
     }
 
 }
