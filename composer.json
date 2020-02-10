@@ -26,7 +26,7 @@
         "php": "^7.3",
         "graham-campbell/guzzle-factory": "^3.0",
         "guzzlehttp/guzzle": "^6.5",
-        "illuminate/support": "~5.8.0|^6.0",
+        "illuminate/support": "^6.0",
         "ext-json": "*"
     },
     "require-dev": {
