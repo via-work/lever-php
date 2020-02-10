@@ -13,11 +13,17 @@ class LeverPhp
     /** @var string */
     private $leverKey;
 
+    /** @var string */
+    private $endpoint = '';
+
+    /** @var string */
+    private $method = 'get';
+
     /** @var GuzzleClient */
     private $client;
 
     /** @var array */
-    private $queryParameters = ['query' => []];
+    private $options = ['query' => []];
 
     /**
      * LeverPhp constructor.
@@ -41,10 +47,10 @@ class LeverPhp
             );
     }
 
-    private function post(string $endpoint, $body = ''): ResponseInterface
+    private function post($body = ''): ResponseInterface
     {
         try {
-            $response = $this->client->post($endpoint, [
+            $response = $this->client->post($this->endpoint, [
                 'json' => $body,
             ]);
         } catch (ClientException $exception) {
@@ -54,10 +60,10 @@ class LeverPhp
         return $response;
     }
 
-    private function get(string $endpoint): ResponseInterface
+    private function get(): ResponseInterface
     {
         try {
-            $response = $this->client->get($endpoint, $this->queryParameters);
+            $response = $this->client->get($this->endpoint, $this->options);
         } catch (ClientException $exception) {
             throw $exception;
         }
@@ -79,7 +85,7 @@ class LeverPhp
     public function addQueryString(string $field, string $value)
     {
         if (!empty($field) && !empty($value)) {
-            $this->queryParameters['query'][$field] = $value;
+            $this->options['query'][$field] = $value;
         }
 
         return $this;
@@ -95,24 +101,37 @@ class LeverPhp
         return $this->client;
     }
 
-    public function opportunities(): LazyCollection
+    public function opportunities()
     {
-        return LazyCollection::make(function () {
+        $this->endpoint = 'opportunities';
+        $this->method = 'get';
 
-            $nextToken = '';
+        return $this;
+    }
+
+    public function fetch(): LazyCollection
+    {
+        $response = $this->responseToArray($this->{$this->method}());
+
+        if (!array_key_exists('hasNext', $response)) {
+            return $response['data'];
+        }
+
+
+        return LazyCollection::make(function () use ($response) {
 
             do {
-                $response = $this->responseToArray(
-                    $this->addQueryString('offset', $nextToken)->get('opportunities')
-                );
-
                 foreach ($response['data'] as $item) {
                     yield $item;
                 }
 
                 $nextToken = $response['next'] ?? '';
 
-            } while ($response['hasNext']);
+                $response = $this->responseToArray(
+                    $this->addQueryString('offset', $nextToken)->{$this->method}()
+                );
+
+            } while ((boolean)$response['hasNext']);
 
         });
     }
