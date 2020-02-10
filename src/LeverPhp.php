@@ -74,18 +74,25 @@ class LeverPhp
 
     public function expand(string $expandable)
     {
-        return $this->addQueryString('expand', $expandable);
+        return $this->addParameter('expand', $expandable);
     }
 
     public function include(string $includable)
     {
-        return $this->addQueryString('include', $includable);
+        return $this->addParameter('include', $includable);
     }
 
-    public function addQueryString(string $field, string $value)
+    /**
+     * @param string $field
+     * @param string|array $value
+     * @return $this
+     */
+    public function addParameter(string $field, $value)
     {
         if (!empty($field) && !empty($value)) {
-            $this->options['query'][$field] = $value;
+            $this->options['query'][$field] = is_array($value)
+                ? implode(',', $value)
+                : $value;
         }
 
         return $this;
@@ -124,22 +131,19 @@ class LeverPhp
                     yield $item;
                 }
 
-
                 if (!empty($response['next'])) {
                     $response = $this->responseToArray(
-                        $this->addQueryString('offset', $response['next'])->{$this->method}()
+                        $this->addParameter('offset', $response['next'])->{$this->method}()
                     );
                 }
-
 
             } while (count($response['data']) > 0);
         });
     }
 
-    private function responseToArray(ResponseInterface $response)
+    private function responseToArray(ResponseInterface $response): array
     {
         return json_decode($response->getBody()->getContents(), true);
     }
-
 
 }
