@@ -125,7 +125,7 @@ class LeverPhp
 
     public function opportunities(string $opportunityId = '')
     {
-        $this->endpoint = 'opportunities/' . $opportunityId;
+        $this->endpoint = 'opportunities' . $opportunityId;
 
         return $this;
     }
