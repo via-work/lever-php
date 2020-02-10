@@ -24,7 +24,8 @@ use \ViaWork\LeverPhp\LeverPhp;
 
 $lever = new LeverPhp('leverKey');
 
-$lever->candidates()
+$lever->opportunities()->fetch();
+
 ```
 
 #### Laravel
@@ -33,12 +34,77 @@ After installing, the package will automatically register its service provider.
 
 To publish the config file to config/lever-php.php run:
 
-``` php
+``` bash
 php artisan vendor:publish --provider="ViaWork\LeverPhp\LeverPhpServiceProvider"
 ```
 
-Change your API keys accordingly.
+After changing your API keys in your ENV file accordingly, you can call a Lever instance as follows:
 
+``` php
+Lever::opportunities()->fetch();
+```
+
+### Methods
+
+This package is modeled after [Lever's Data API documentation](https://hire.lever.co/developer/documentation), so you should be able to find a method for most of the endpoints.
+
+For example, if you would like to fetch all Opportunities you would simply call:
+ 
+ ``` php
+ Lever::opportunities()->fetch();
+```
+
+
+To retrieve a single opportunity you should call the same method while passing the id as a parameter: 
+
+``` php
+Lever::opportunities('250d8f03-738a-4bba-a671-8a3d73477145')->fetch();
+```
+
+To create an opportunity use the create method while passing the fields array (use same names as Lever):
+
+``` php
+$newOpportunity = [
+                   'name' => 'Shane Smith',
+                   'headline' => 'Brickly LLC, Vandelay Industries, Inc, Central Perk',
+                   'stage' => '00922a60-7c15-422b-b086-f62000824fd7',
+                    ...
+                  ];
+
+Lever::opportunities()->create($newOpportunity);
+```
+
+When and update endpoint is available, you can do it as follows:
+
+``` php
+$posting = [
+             'text' => 'Infrastructure Engineer',
+             'state' => 'published',
+             ...
+           ];
+
+Lever::postings('730e37db-93d3-4acf-b9de-7cfc397cef1d')
+    ->performAs('8d49b010-cc6a-4f40-ace5-e86061c677ed')
+    ->update($posting);
+```
+
+Be aware of the resources that require some parameters to work. When creating a posting for example, the _perform_as_ parameter is required. You can pass this information with the `performAs($userId)` method.
+
+#### Pagination
+
+All Lever resources with a list endpoint (candidates, users, postings) have pagination and a max limit of 100 results per page. LeverPhp handles this automatically leveraging Laravel [LazyCollection](https://laravel.com/docs/6.x/collections#lazy-collections) class. For example, you can iterate over the whole set of Opportunities without worrying about pagination:
+
+ ``` php
+ $opportunities = Lever::opportunities()->fetch();
+
+ foreach ($opportunities as $opportunity) {
+     echo $opportunity['name];
+ }
+``` 
+
+When item hundred is reached, another call is made to the API requesting the next 100 items until there are no more left.
+
+Of course you can take advantage of all [methods available](https://laravel.com/docs/6.x/collections#the-enumerable-contract) on the LazyCollection class. 
 
 ### Testing
 
