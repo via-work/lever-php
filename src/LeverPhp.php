@@ -172,14 +172,4 @@ class LeverPhp
         return json_decode($response->getBody()->getContents(), true);
     }
 
-    public function yes()
-    {
-        [
-            'name' => 'Shane Smith',
-            'headline' => 'Brickly LLC, Vandelay Industries, Inc, Central Perk',
-            'stage' => '00922a60-7c15-422b-b086-f62000824fd7',
-            ...
-        ];
-    }
-
 }
