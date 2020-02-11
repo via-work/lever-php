@@ -162,9 +162,9 @@ If you discover any security related issues, please email dev@via.work instead o
 
 ## Credits
 
-- [Via.work](https://github.com/via-work)
 - [Omar Sánchez](https://github.com/omarsancas)
 - [Alfonso Strotgen](https://github.com/strotgen)
+- [Via.work](https://github.com/via-work)
 - [All Contributors](../../contributors)
 
 ## License
