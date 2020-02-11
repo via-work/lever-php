@@ -46,7 +46,7 @@ Lever::opportunities()->fetch();
 
 ### Methods
 
-This package is modeled after [Lever's Data API documentation](https://hire.lever.co/developer/documentation), so you should be able to find a method for most of the endpoints.
+This package is modeled after [Lever's Data API documentation](https://hire.lever.co/developer/documentation), so you should be able to find a method for many of the endpoints.
 
 For example, if you would like to fetch all Opportunities you would simply call:
  
@@ -96,6 +96,30 @@ When a resource depends on another one to work, you can simply chain the methods
 Lever::opportunities('250d8f03-738a-4bba-a671-8a3d73477145')->offers()->fetch();
 ```
 
+#### Parameters
+
+There are many helper methods available to include parameters in a request. For example, to _include_ the _followers_ and _expand applications_ and _stages_, when fetching opportunities, you can do so:
+
+```php
+Lever::opportunities()
+    ->include('followers')
+    ->expand(['applications', 'stages'])
+    ->fetch();
+```
+
+Notice you can pass a string or an array of strings in both methods. 
+
+Not all parameters have a method available, but you can use the `addParameter($field, $value)` method for this. This method can be chained without overwriting previous values. For example:
+
+ ```php
+ Lever::opportunities()
+     ->addParameter('origin', 'applied')
+     ->addParameter('posting_id', 'f2f01e16-27f8-4711-a728-7d49499795a0')
+     ->fetch();
+ ```
+
+However, be aware that when using the same field name, it will get overwritten. 
+
 #### Pagination
 
 All Lever resources with a list endpoint (candidates, users, postings) have pagination and a max limit of 100 results per page. LeverPhp handles this automatically leveraging Laravel [LazyCollection](https://laravel.com/docs/6.x/collections#lazy-collections) class. For example, you can iterate over the whole set of Opportunities without worrying about pagination:
@@ -111,6 +135,11 @@ All Lever resources with a list endpoint (candidates, users, postings) have pagi
 When item hundred is reached, another call is made to the API requesting the next 100 items until there are no more left.
 
 Of course you can take advantage of all [methods available](https://laravel.com/docs/6.x/collections#the-enumerable-contract) on the LazyCollection class. 
+
+#### Client
+
+If a method is not available for the resource you are trying to reach, you can get an instance of the Guzzle client directly by calling `Lever::client()`. Feel free to add it to the source code. Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+
 
 ### Testing
 
