@@ -25,10 +25,10 @@ class LeverPhp
 
     /**
      * LeverPhp constructor.
-     * @param string $leverKey
+     * @param string|null $leverKey
      * @param GuzzleClient|null $client
      */
-    public function __construct(string $leverKey, GuzzleClient $client = null)
+    public function __construct(string $leverKey = null, GuzzleClient $client = null)
     {
         $this->leverKey = $leverKey;
 
@@ -95,6 +95,8 @@ class LeverPhp
                 foreach ($response['data'] as $item) {
                     yield $item;
                 }
+
+                $response['data'] = [];
 
                 if (!empty($response['next'])) {
                     $response = $this->responseToArray(
