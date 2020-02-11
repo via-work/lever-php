@@ -11,17 +11,13 @@ use GrahamCampbell\GuzzleFactory\GuzzleFactory;
 
 class LeverPhp
 {
-    /** @var string */
-    private $leverKey;
+    private ?string $leverKey = '';
 
-    /** @var string */
-    private $endpoint = '';
+    private string $endpoint = '';
 
-    /** @var GuzzleClient */
-    private $client;
+    private GuzzleClient $client;
 
-    /** @var array */
-    private $options = ['query' => []];
+    private array $options = ['query' => []];
 
     /**
      * LeverPhp constructor.
@@ -45,6 +41,12 @@ class LeverPhp
             );
     }
 
+    private function reset()
+    {
+        $this->endpoint = '';
+        $this->options = ['query' => []];
+    }
+
     private function post(array $body): ResponseInterface
     {
         try {
@@ -53,6 +55,8 @@ class LeverPhp
             ]);
         } catch (ClientException $exception) {
             throw $exception;
+        } finally {
+            $this->reset();
         }
 
         return $response;
@@ -64,6 +68,8 @@ class LeverPhp
             $response = $this->client->get($this->endpoint, $this->options);
         } catch (ClientException $exception) {
             throw $exception;
+        } finally {
+            $this->reset();
         }
 
         return $response;
@@ -156,7 +162,7 @@ class LeverPhp
 
     public function opportunities(string $opportunityId = '')
     {
-        $this->endpoint = 'opportunities' . (empty($opportunityId) ? '' : '/' . $opportunityId) ;
+        $this->endpoint = 'opportunities' . (empty($opportunityId) ? '' : '/' . $opportunityId);
 
         return $this;
     }
