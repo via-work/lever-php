@@ -113,11 +113,11 @@ class LeverPhp
 
     public function offers()
     {
-        $regex = '/^opportunities\/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/';
-
-        if (preg_match($regex, $this->endpoint) === 0){
-            throw new Exception('Did not chain methods in correct order.');
-        }
+        // TODO next release.
+        // $regex = '/^opportunities\/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/';
+        // if (preg_match($regex, $this->endpoint) === 0){
+        //     throw new Exception('Did not chain methods in correct order.');
+        // }
 
         $this->endpoint .= '/offers';
 

@@ -74,7 +74,7 @@ $newOpportunity = [
 Lever::opportunities()->create($newOpportunity);
 ```
 
-When and update endpoint is available, you can do it as follows:
+When an update endpoint is available, you can do it as follows:
 
 ``` php
 $posting = [
