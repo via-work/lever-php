@@ -1,0 +1,131 @@
+{
+    "data": [
+        {
+            "id": "a72d66c0-0fd7-4bf8-99ce-dc5979358862",
+            "createdAt": 1475540115263,
+            "status": "signed",
+            "creator": "315b702b-27ec-49ac-89f6-449148fe5764",
+            "fields": [
+                {
+                    "text": "Job posting",
+                    "identifier": "job_posting",
+                    "value": "80fd493b-3e01-4e05-82df-464d3ae2a7b8"
+                },
+                {
+                    "text": "Job title",
+                    "identifier": "job_title",
+                    "value": "Back End Software Engineer"
+                },
+                {
+                    "text": "Candidate name",
+                    "identifier": "candidate_name",
+                    "value": "Marvin Gaye"
+                },
+                {
+                    "text": "Offered compensation amount",
+                    "identifier": "salary_amount",
+                    "value": 1319000
+                },
+                {
+                    "text": "Compensation currency",
+                    "identifier": "compensation_currency",
+                    "value": "USD"
+                },
+                {
+                    "text": "Type of earnings",
+                    "identifier": "salary_interval",
+                    "value": "per-year-salary"
+                },
+                {
+                    "text": "Hiring manager",
+                    "identifier": "hiring_manager",
+                    "value": "aa290857-ef5a-4696-8b85-62e8d495dc4b"
+                },
+                {
+                    "text": "Today's date",
+                    "identifier": "today_date",
+                    "value": 1475540150185
+                },
+                {
+                    "text": "Direct manager",
+                    "identifier": "direct_manager",
+                    "value": "ac92b6db-6e40-4b08-ae7b-236ba24f0a82"
+                },
+                {
+                    "text": "Anticipated start date",
+                    "identifier": "anticipated_start_date",
+                    "value": 1475540150185
+                },
+                {
+                    "text": "equity",
+                    "identifier": "custom_equity",
+                    "value": 12345
+                }
+            ]
+        },
+        {
+            "id": "63662f8b-4c61-4e7e-afaa-73132a795a68",
+            "createdAt": 1475819157595,
+            "status": "draft",
+            "creator": "dc15f004-e071-4d21-ba63-a842d4fa3c52",
+            "fields": [
+                {
+                    "text": "Job posting",
+                    "identifier": "job_posting",
+                    "value": "4517dd53-f3ed-460e-b1ca-1395b0a4743b"
+                },
+                {
+                    "text": "Job title",
+                    "identifier": "job_title",
+                    "value": "Front End Software Engineer"
+                },
+                {
+                    "text": "Requisition",
+                    "identifier": "requisition",
+                    "value": "3d06e628-747c-46a4-8529-c8b67a2875db"
+                },
+                {
+                    "text": "Candidate name",
+                    "identifier": "candidate_name",
+                    "value": "Marvin Gaye"
+                },
+                {
+                    "text": "Offered compensation amount",
+                    "identifier": "salary_amount",
+                    "value": 1319000
+                },
+                {
+                    "text": "Compensation currency",
+                    "identifier": "compensation_currency",
+                    "value": "USD"
+                },
+                {
+                    "text": "Type of earnings",
+                    "identifier": "salary_interval",
+                    "value": "per-year-salary"
+                },
+                {
+                    "text": "equity",
+                    "identifier": "custom_equity",
+                    "value": 12345
+                },
+                {
+                    "text": "Today's date",
+                    "identifier": "today_date",
+                    "value": 1475540150185
+                },
+                {
+                    "text": "Direct manager",
+                    "identifier": "direct_manager",
+                    "value": "f2fa7ddf-e816-4fe1-a973-e99aa90316dd"
+                },
+                {
+                    "text": "Anticipated start date",
+                    "identifier": "anticipated_start_date",
+                    "value": 1475540150185
+                }
+            ]
+        }
+    ],
+    "hasNext": false
+}
