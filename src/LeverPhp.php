@@ -48,9 +48,8 @@ class LeverPhp
     private function post(array $body): ResponseInterface
     {
         try {
-            $response = $this->client->post($this->endpoint, [
-                'json' => $body,
-            ]);
+            $response = $this->client->post($this->endpoint,
+                array_merge(array('json' => $body), $this->options));
         } catch (ClientException $exception) {
             throw $exception;
         }
