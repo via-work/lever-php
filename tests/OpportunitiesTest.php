@@ -2,6 +2,7 @@
 
 namespace ViaWork\LeverPhp\Tests;
 
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\LazyCollection;
 
@@ -78,6 +79,54 @@ class OpportunitiesTest extends TestCase
     }
 
     /** @test */
+    public function create_opportunity()
+    {
+        $this->mockHandler->append(new Response(200, [], file_get_contents($this->opportunity)),);
+
+        $newOpportunity = [
+            'name' => 'Shane Smith',
+            'headline' => 'Brickly LLC, Vandelay Industries, Inc, Central Perk',
+            'stage' => '00922a60-7c15-422b-b086-f62000824fd7',
+            'email'
+        ];
+
+        $opportunity = $this->lever->opportunities()
+            ->performAs('8d49b010-cc6a-4f40-ace5-e86061c677ed')
+            ->create($newOpportunity);
+
+        $this->assertIsArray($opportunity);
+
+        $this->assertEquals(
+            'opportunities?perform_as=8d49b010-cc6a-4f40-ace5-e86061c677ed',
+            (string)$this->container[0]['request']->getUri()
+        );
+    }
+
+    /** @test */
+    public function fail_to_create_opportunity_when_no_perform_as_parameter_included()
+    {
+        $this->expectException(ClientException::class);
+
+        $this->mockHandler->append(new Response(400, [],
+            '{"code": "BadRequestError", "message": "Missing perform_as parameter. Please specify a user for which to perform this create."}'
+        ));
+
+        $newOpportunity = [
+            'name' => 'Shane Smith',
+            'headline' => 'Brickly LLC, Vandelay Industries, Inc, Central Perk',
+            'stage' => '00922a60-7c15-422b-b086-f62000824fd7',
+            'email'
+        ];
+
+        $opportunity = $this->lever->opportunities()->create($newOpportunity);
+
+        $this->assertEquals(
+            'opportunities',
+            (string)$this->container[0]['request']->getUri()
+        );
+    }
+
+    /** @test */
     public function fetching_offers()
     {
         $this->mockHandler->append(new Response(200, [], file_get_contents($this->offers)),);
@@ -92,6 +141,5 @@ class OpportunitiesTest extends TestCase
             'opportunities/250d8f03-738a-4bba-a671-8a3d73477145/offers',
             (string)$this->container[0]['request']->getUri()
         );
-
     }
 }
