@@ -8,10 +8,10 @@ use Illuminate\Support\LazyCollection;
 
 class OpportunitiesTest extends TestCase
 {
-    private string $offers = __DIR__ . '/fixtures/offers.json';
-    private string $opportunity = __DIR__ . '/fixtures/opportunity.json';
-    private string $opportunities = __DIR__ . '/fixtures/opportunities.json';
-    private string $opportunitiesNextFalse = __DIR__ . '/fixtures/opportunities-hasNext-false.json';
+    private $offers = __DIR__ . '/fixtures/offers.json';
+    private $opportunity = __DIR__ . '/fixtures/opportunity.json';
+    private $opportunities = __DIR__ . '/fixtures/opportunities.json';
+    private $opportunitiesNextFalse = __DIR__ . '/fixtures/opportunities-hasNext-false.json';
 
     /** @test */
     public function automated_pagination_works_correctly_on_opportunities()

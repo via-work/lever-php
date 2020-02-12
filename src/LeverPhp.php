@@ -2,7 +2,6 @@
 
 namespace ViaWork\LeverPhp;
 
-use Exception;
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\LazyCollection;
 use Psr\Http\Message\ResponseInterface;
@@ -11,13 +10,13 @@ use GrahamCampbell\GuzzleFactory\GuzzleFactory;
 
 class LeverPhp
 {
-    private ?string $leverKey = '';
+    private $leverKey = '';
 
-    private string $endpoint = '';
+    private $endpoint = '';
 
-    private GuzzleClient $client;
+    private $client;
 
-    private array $options = ['query' => []];
+    private $options = ['query' => []];
 
     /**
      * LeverPhp constructor.
