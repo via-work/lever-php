@@ -2,6 +2,7 @@
 
 namespace ViaWork\LeverPhp;
 
+use Exception;
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\LazyCollection;
 use Psr\Http\Message\ResponseInterface;
@@ -35,7 +36,7 @@ class LeverPhp
                         'Accept' => 'application/json',
                         'Content-Type' => 'application/json',
                     ],
-                    'auth' => [$leverKey, '']
+                    'auth' => [$leverKey, ''],
                 ]
             );
     }
@@ -48,6 +49,7 @@ class LeverPhp
 
     private function post(array $body): ResponseInterface
     {
+        $this->options['query'] = build_query($this->options['query']);
         try {
             $response = $this->client->post($this->endpoint,
                 array_merge(array('json' => $body), $this->options));
@@ -62,6 +64,8 @@ class LeverPhp
 
     private function get(): ResponseInterface
     {
+//        $this->options['query'] = build_query($this->options['query']);
+
         try {
             $response = $this->client->get($this->endpoint, $this->options);
         } catch (ClientException $exception) {
@@ -178,4 +182,26 @@ class LeverPhp
         return $this;
     }
 
+    public function postings(string $postingId = '')
+    {
+        $this->endpoint = 'postings' . (empty($postingId) ? '' : '/' . $postingId);
+
+        return $this;
+    }
+
+    public function state(string $state)
+    {
+        if (!in_array($state, ['published', 'internal', 'closed', 'draft', 'pending', 'rejected'])) {
+            throw new Exception('Not a valid state');
+        }
+
+        return $this->addParameter('state', $state);
+    }
+
+
+    public function team(string $team)
+    {
+        return $this->addParameter('state', $team);
+
+    }
 }
