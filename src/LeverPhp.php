@@ -3,8 +3,8 @@
 namespace ViaWork\LeverPhp;
 
 use Exception;
-use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\LazyCollection;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\ClientException;
@@ -18,7 +18,7 @@ class LeverPhp
 
     private $client;
 
-    private $options = ['query' => []];
+    private $options = [];
 
     /**
      * LeverPhp constructor.
@@ -48,7 +48,7 @@ class LeverPhp
     private function reset()
     {
         $this->endpoint = '';
-        $this->options = ['query' => []];
+        $this->options = [];
     }
 
     private function post(array $body): ResponseInterface
