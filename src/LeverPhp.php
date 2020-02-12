@@ -201,9 +201,13 @@ class LeverPhp
     }
 
 
-    public function team(string $team)
+    /**
+     * @param array|string $team
+     * @return $this
+     */
+    public function team($team)
     {
-        return $this->addParameter('state', $team);
+        return $this->addParameter('team', $team);
 
     }
 }
