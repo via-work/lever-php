@@ -67,8 +67,6 @@ class LeverPhp
 
     private function get(): ResponseInterface
     {
-//        $this->options['query'] = build_query($this->options['query']);
-
         try {
             $response = $this->client->get($this->endpoint, $this->options);
         } catch (ClientException $exception) {
@@ -134,7 +132,7 @@ class LeverPhp
         return json_decode($response->getBody()->getContents(), true);
     }
 
-    public function expand(string $expandable)
+    public function expand($expandable)
     {
         return $this->addParameter('expand', $expandable);
     }
@@ -144,7 +142,7 @@ class LeverPhp
         return $this->addParameter('perform_as', $userId);
     }
 
-    public function include(string $includable)
+    public function include($includable)
     {
         return $this->addParameter('include', $includable);
     }
@@ -157,9 +155,10 @@ class LeverPhp
     public function addParameter(string $field, $value)
     {
         if (!empty($field) && !empty($value)) {
-            $this->options['query'][$field] = is_array($value)
-                ? implode(',', $value)
-                : $value;
+
+            $value = is_string($value) ? [$value] : $value;
+
+            $this->options['query'][$field] = array_merge($this->options['query'][$field] ?? [], $value);
         }
 
         return $this;

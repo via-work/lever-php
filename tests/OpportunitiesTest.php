@@ -46,29 +46,29 @@ class OpportunitiesTest extends TestCase
     }
 
     /** @test */
-    public function include_and_expand_work_correctly()
+    public function add_parameters_work_correctly()
     {
         for ($i = 0; $i < 4; $i++) {
             $this->mockHandler->append(new Response(200, [], '{"data": {}}'));
         }
 
-        $this->lever->opportunities()->include('followers')->fetch();
-        $this->lever->include('followers')->opportunities()->fetch();
-        $this->lever->opportunities()->expand('applications')->fetch();
+        $this->lever->opportunities()->include('followers')->include('content')->fetch();
+        $this->lever->include(['followers', 'content'])->opportunities()->fetch();
+        $this->lever->opportunities()->expand('applications')->expand(['user', 'posting'])->fetch();
         $this->lever->include('followers')->opportunities()->expand('applications')->fetch();
 
         $this->assertEquals(
-            'opportunities?include=followers',
+            'opportunities?include=followers&include=content',
             (string)$this->container[0]['request']->getUri()
         );
 
         $this->assertEquals(
-            'opportunities?include=followers',
+            'opportunities?include=followers&include=content',
             (string)$this->container[1]['request']->getUri()
         );
 
         $this->assertEquals(
-            'opportunities?expand=applications',
+            'opportunities?expand=applications&expand=user&expand=posting',
             (string)$this->container[2]['request']->getUri()
         );
 
