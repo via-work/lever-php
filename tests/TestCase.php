@@ -1,16 +1,13 @@
 <?php
 
-
 namespace ViaWork\LeverPhp\Tests;
 
-
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
-use Psr\Http\Message\RequestInterface;
+use GuzzleHttp\HandlerStack;
 use ViaWork\LeverPhp\LeverPhp;
-use function GuzzleHttp\Psr7\build_query;
+use GuzzleHttp\Handler\MockHandler;
+use GrahamCampbell\GuzzleFactory\GuzzleFactory;
+use ViaWork\LeverPhp\DuplicateAggregatorMiddleware;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
@@ -26,15 +23,22 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
         $this->container = [];
 
-        $history = Middleware::history($this->container);
-
         $stack = HandlerStack::create($this->mockHandler);
 
-        $stack->push($history);
+        $stack->push(DuplicateAggregatorMiddleware::buildQuery());
 
-        $client = new Client([
-            'handler' => $stack,
-        ]);
+        $stack->push(Middleware::history($this->container));
+
+        $client = GuzzleFactory::make(
+            [
+                'base_uri' => '',
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                ],
+                'handler' => $stack
+            ]
+        );
 
         $this->lever = new LeverPhp(null, $client);
     }

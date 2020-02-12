@@ -31,7 +31,6 @@ class LeverPhp
 
         $stack = HandlerStack::create(DuplicateAggregatorMiddleware::buildQuery());
 
-
         // TODO pass RateLimiterMiddleware, check if compatible with exponential backoff
         $this->client = $client ?? GuzzleFactory::make(
                 [
@@ -54,7 +53,6 @@ class LeverPhp
 
     private function post(array $body): ResponseInterface
     {
-        $this->options['query'] = build_query($this->options['query']);
         try {
             $response = $this->client->post($this->endpoint,
                 array_merge(array('json' => $body), $this->options));
