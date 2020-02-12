@@ -4,6 +4,7 @@ namespace ViaWork\LeverPhp;
 
 use Exception;
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\HandlerStack;
 use Illuminate\Support\LazyCollection;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\ClientException;
@@ -28,6 +29,9 @@ class LeverPhp
     {
         $this->leverKey = $leverKey;
 
+        $stack = HandlerStack::create(DuplicateAggregatorMiddleware::buildQuery());
+
+
         // TODO pass RateLimiterMiddleware, check if compatible with exponential backoff
         $this->client = $client ?? GuzzleFactory::make(
                 [
@@ -37,6 +41,7 @@ class LeverPhp
                         'Content-Type' => 'application/json',
                     ],
                     'auth' => [$leverKey, ''],
+                    'handler' => $stack
                 ]
             );
     }

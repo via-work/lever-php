@@ -8,15 +8,17 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
+use Psr\Http\Message\RequestInterface;
 use ViaWork\LeverPhp\LeverPhp;
+use function GuzzleHttp\Psr7\build_query;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
-    protected LeverPhp $lever;
+    protected $lever;
 
-    protected MockHandler $mockHandler;
+    protected $mockHandler;
 
-    protected array $container;
+    protected $container;
 
     protected function setUp(): void
     {
@@ -35,6 +37,8 @@ class TestCase extends \Orchestra\Testbench\TestCase
         ]);
 
         $this->lever = new LeverPhp(null, $client);
-
     }
+
+
+
 }
