@@ -11,24 +11,20 @@ use GrahamCampbell\GuzzleFactory\GuzzleFactory;
 
 class LeverPhp
 {
-    /** @var string */
-    private $leverKey;
+    private ?string $leverKey = '';
 
-    /** @var string */
-    private $endpoint = '';
+    private string $endpoint = '';
 
-    /** @var GuzzleClient */
-    private $client;
+    private GuzzleClient $client;
 
-    /** @var array */
-    private $options = ['query' => []];
+    private array $options = ['query' => []];
 
     /**
      * LeverPhp constructor.
-     * @param string $leverKey
+     * @param string|null $leverKey
      * @param GuzzleClient|null $client
      */
-    public function __construct(string $leverKey, GuzzleClient $client = null)
+    public function __construct(string $leverKey = null, GuzzleClient $client = null)
     {
         $this->leverKey = $leverKey;
 
@@ -45,6 +41,12 @@ class LeverPhp
             );
     }
 
+    private function reset()
+    {
+        $this->endpoint = '';
+        $this->options = ['query' => []];
+    }
+
     private function post(array $body): ResponseInterface
     {
         try {
@@ -52,6 +54,8 @@ class LeverPhp
                 array_merge(array('json' => $body), $this->options));
         } catch (ClientException $exception) {
             throw $exception;
+        } finally {
+            $this->reset();
         }
 
         return $response;
@@ -63,6 +67,8 @@ class LeverPhp
             $response = $this->client->get($this->endpoint, $this->options);
         } catch (ClientException $exception) {
             throw $exception;
+        } finally {
+            $this->reset();
         }
 
         return $response;
@@ -94,6 +100,8 @@ class LeverPhp
                 foreach ($response['data'] as $item) {
                     yield $item;
                 }
+
+                $response['data'] = [];
 
                 if (!empty($response['next'])) {
                     $response = $this->responseToArray(
@@ -153,7 +161,7 @@ class LeverPhp
 
     public function opportunities(string $opportunityId = '')
     {
-        $this->endpoint = 'opportunities' . (empty($opportunityId) ? '' : '/' . $opportunityId) ;
+        $this->endpoint = 'opportunities' . (empty($opportunityId) ? '' : '/' . $opportunityId);
 
         return $this;
     }
