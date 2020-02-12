@@ -142,4 +142,38 @@ class OpportunitiesTest extends TestCase
             (string)$this->container[0]['request']->getUri()
         );
     }
+
+    /** @test */
+    public function uris_are_generated_correctly()
+    {
+        $this->mockHandler->append(
+            new Response(200, [], '{"data": {}}'),
+            new Response(200, [], '{"data": {}}'),
+            new Response(200, [], '{"data": {}}'),
+            );
+
+        $this->lever->opportunities('250d8f03-738a-4bba-a671-8a3d73477145')->resumes()->fetch();
+        $this->lever->opportunities('250d8f03-738a-4bba-a671-8a3d73477145')
+            ->resumes('6a1e4b79-75a3-454f-9417-ea79612b9585')->fetch();
+        $this->lever->opportunities('250d8f03-738a-4bba-a671-8a3d73477145')
+            ->resumes('6a1e4b79-75a3-454f-9417-ea79612b9585')->download()->fetch();
+
+        $this->assertEquals(
+            'opportunities/250d8f03-738a-4bba-a671-8a3d73477145/resumes',
+            (string)$this->container[0]['request']->getUri()
+        );
+
+        $this->assertEquals(
+            'opportunities/250d8f03-738a-4bba-a671-8a3d73477145/resumes/6a1e4b79-75a3-454f-9417-ea79612b9585',
+            (string)$this->container[1]['request']->getUri()
+        );
+
+        $this->assertEquals(
+            'opportunities/250d8f03-738a-4bba-a671-8a3d73477145/resumes/6a1e4b79-75a3-454f-9417-ea79612b9585/download',
+            (string)$this->container[2]['request']->getUri()
+        );
+
+    }
+
+
 }

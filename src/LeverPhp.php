@@ -171,6 +171,20 @@ class LeverPhp
         return $this;
     }
 
+    public function resumes(string $resumeId = '')
+    {
+        $this->endpoint .= '/resumes' . (empty($resumeId) ? '' : '/' . $resumeId);
+
+        return $this;
+    }
+
+    public function download()
+    {
+        $this->endpoint .= '/download';
+
+        return $this;
+    }
+
     public function offers()
     {
         // TODO next release.
