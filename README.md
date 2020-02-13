@@ -4,6 +4,7 @@
 [![Build Status](https://img.shields.io/travis/via-work/lever-php/master.svg?style=flat-square)](https://travis-ci.org/via-work/lever-php)
 [![Quality Score](https://img.shields.io/scrutinizer/g/via-work/lever-php.svg?style=flat-square)](https://scrutinizer-ci.com/g/via-work/lever-php)
 [![Total Downloads](https://img.shields.io/packagist/dt/via-work/lever-php.svg?style=flat-square)](https://packagist.org/packages/via-work/lever-php)
+![StyleCI](https://github.styleci.io/repos/238786347/shield?branch=master)
 
 Super-simple Lever Data API v1 wrapper in PHP with support for Laravel.
 
