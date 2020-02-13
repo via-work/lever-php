@@ -233,6 +233,18 @@ class LeverPhp
         return $this;
     }
 
+    public function sendConfirmationEmail()
+    {
+        return $this->addParameter('send_confirmation_email', 'true');
+    }
+
+    public function apply(array $body): array
+    {
+        $this->endpoint .= '/apply';
+
+        return $this->create($body);
+    }
+
     public function state(string $state)
     {
         if (!in_array($state, ['published', 'internal', 'closed', 'draft', 'pending', 'rejected'])) {
@@ -253,7 +265,6 @@ class LeverPhp
 
     }
 
-    //apply
 
     public function hasFiles()
     {
