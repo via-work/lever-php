@@ -235,7 +235,7 @@ class LeverPhp
 
     public function sendConfirmationEmail()
     {
-        return $this->addParameter('send_confirmation_email', true);
+        return $this->addParameter('send_confirmation_email', 'true');
     }
 
     public function apply(array $body): array

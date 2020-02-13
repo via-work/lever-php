@@ -14,12 +14,14 @@ class PostingsTest extends TestCase
             new Response(200, [], '{"data": {}}'),
             new Response(200, [], '{"data": {}}'),
             new Response(200, [], '{"data": {}}'),
+            new Response(200, [], '{"data": {}}'),
             );
 
         $this->lever->postings()->fetch();
         $this->lever->postings()->team('Accounting')->fetch();
         $this->lever->postings('6a1e4b79-75a3-454f-9417-ea79612b9585')->team('BizOps')->fetch();
         $this->lever->postings()->team(['Accounting', 'Product'])->fetch();
+        $this->lever->postings('6a1e4b79-75a3-454f-9417-ea79612b9585')->sendConfirmationEmail()->apply(['ipAddress' => '184.23.195.146']);
 
         $this->assertEquals(
             'postings',
@@ -40,6 +42,11 @@ class PostingsTest extends TestCase
         $this->assertEquals(
             'postings?team=Accounting&team=Product',
             (string)$this->container[3]['request']->getUri()
+        );
+
+        $this->assertEquals(
+            'postings/6a1e4b79-75a3-454f-9417-ea79612b9585/apply?send_confirmation_email=true',
+            (string)$this->container[4]['request']->getUri()
         );
     }
 }
