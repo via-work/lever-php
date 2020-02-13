@@ -74,7 +74,7 @@ $newOpportunity = [
 Lever::opportunities()->create($newOpportunity);
 ```
 
-When submiting an application on behalf of a candidate to a specific posting you should the following method:
+When submiting an application on behalf of a candidate to a specific posting you should use the following method:
  
 ``` php
 $application = [
