@@ -42,6 +42,4 @@ class PostingsTest extends TestCase
             (string)$this->container[3]['request']->getUri()
         );
     }
-
-
 }

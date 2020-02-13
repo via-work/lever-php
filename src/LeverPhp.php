@@ -37,7 +37,6 @@ class LeverPhp
                     'base_uri' => 'https://api.lever.co/v1/',
                     'headers' => [
                         'Accept' => 'application/json',
-                        'Content-Type' => 'application/json',
                     ],
                     'auth' => [$leverKey, ''],
                     'handler' => $stack
@@ -54,8 +53,7 @@ class LeverPhp
     private function post(array $body): ResponseInterface
     {
         try {
-            $response = $this->client->post($this->endpoint,
-                array_merge(array('json' => $body), $this->options));
+            $response = $this->client->post($this->endpoint, $this->options($body));
         } catch (ClientException $exception) {
             throw $exception;
         } finally {
@@ -63,6 +61,37 @@ class LeverPhp
         }
 
         return $response;
+    }
+
+    private function options($body)
+    {
+        if (isset($this->options['headers']['Content-Type']) && $this->options['headers']['Content-Type'] === 'multipart/form-data') {
+
+            $options = [];
+
+            foreach ($body as $key => $item) {
+                if (is_array($item)) {
+                    foreach ($item as $subKey => $subItem) {
+                        if (is_numeric($subKey)) {
+                            $options[] = ['name' => $key . '[]', 'contents' => $subItem];
+                        }
+
+                        if (is_string($subKey)) {
+                            $options[] = ['name' => "{$key}[{$subKey}]", 'contents' => $subItem];
+                        }
+                    }
+                }
+
+                if (is_string($item)) {
+                    $options[] = ['name' => $key, 'contents' => $item];
+                }
+            }
+
+
+            return array_merge(['multipart' => $options], $this->options);
+        }
+
+        return array_merge(['json' => $body], $this->options);
     }
 
     private function get(): ResponseInterface
@@ -223,5 +252,14 @@ class LeverPhp
     {
         return $this->addParameter('team', $team);
 
+    }
+
+    //apply
+
+    public function hasFiles()
+    {
+        $this->options['headers'] = ['Content-Type' => 'multipart/form-data'];
+
+        return $this;
     }
 }
