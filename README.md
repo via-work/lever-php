@@ -74,6 +74,22 @@ $newOpportunity = [
 Lever::opportunities()->create($newOpportunity);
 ```
 
+When submiting an application on behalf of a candidate to a specific posting you should the following method:
+ 
+``` php
+$application = [
+                   'customQuestions' => [...],
+                   'personalInformation' => [...],
+                   'ipAddress' => '184.23.195.146',
+                    ...
+                  ];
+
+Lever::opportunities('730e37db-93d3-4acf-b9de-7cfc397cef1d')
+    ->sendConfirmationEmail()
+    ->apply($application);
+```
+
+
 When an update endpoint is available, you can do it as follows:
 
 ``` php
@@ -95,6 +111,8 @@ When a resource depends on another one to work, you can simply chain the methods
 ``` php
 Lever::opportunities('250d8f03-738a-4bba-a671-8a3d73477145')->offers()->fetch();
 ```
+
+
 
 #### Parameters
 
