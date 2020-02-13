@@ -118,8 +118,22 @@ Not all parameters have a method available, but you can use the `addParameter($f
      ->addParameter('posting_id', 'f2f01e16-27f8-4711-a728-7d49499795a0')
      ->fetch();
  ```
-
 Be aware that when using the same field name, the new value will be appended and not overwritten. 
+
+#### Uploading files and resumes
+
+LeverPhp allows you to include resumes or files when available. To do this, you simply have to include the file in the fields array, using the same names as in Lever and chaining the `hasFiles()` method (before the `create` or `update` method!). For example, you can append a resume when creating an opportunity: 
+
+
+``` php
+$newOpportunity = [
+                   'name' => 'Shane Smith',
+                   'headline' => 'Brickly LLC, Vandelay Industries, Inc, Central Perk',
+                   'resumeFile' => fopen('/path/to/resume.pdf', 'r')
+                  ];
+
+Lever::opportunities()->hasFiles()->create($newOpportunity);
+```
 
 #### Pagination
 
