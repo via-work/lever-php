@@ -104,10 +104,11 @@ There are many helper methods available to include parameters in a request. For 
 Lever::opportunities()
     ->include('followers')
     ->expand(['applications', 'stages'])
+    ->expand('posting')
     ->fetch();
 ```
 
-Notice you can pass a string or an array of strings in both methods. 
+Notice you can pass a string or an array of strings in both methods, and you can chain the same method many times if you wish. 
 
 Not all parameters have a method available, but you can use the `addParameter($field, $value)` method for this. This method can be chained without overwriting previous values. For example:
 
@@ -118,7 +119,7 @@ Not all parameters have a method available, but you can use the `addParameter($f
      ->fetch();
  ```
 
-However, be aware that when using the same field name, it will get overwritten. 
+Be aware that when using the same field name, the new value will be appended and not . 
 
 #### Pagination
 
