@@ -119,7 +119,7 @@ Not all parameters have a method available, but you can use the `addParameter($f
      ->fetch();
  ```
 
-Be aware that when using the same field name, the new value will be appended and not . 
+Be aware that when using the same field name, the new value will be appended and not overwritten. 
 
 #### Pagination
 
