@@ -2,8 +2,8 @@
 
 namespace ViaWork\LeverPhp;
 
-use ViaWork\LeverPhp\Facade\Lever;
 use Illuminate\Support\ServiceProvider;
+use ViaWork\LeverPhp\Facade\Lever;
 
 class LeverPhpServiceProvider extends ServiceProvider
 {
@@ -17,7 +17,7 @@ class LeverPhpServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/config.php' => config_path('lever-php.php'),
+                __DIR__.'/../config/config.php' => config_path('lever-php.php'),
             ], 'config');
 
             // Registering package commands.
@@ -31,7 +31,7 @@ class LeverPhpServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'lever');
+        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'lever');
 
         // Register the main class to use with the facade
         $this->app->singleton('lever-php', static function () {
