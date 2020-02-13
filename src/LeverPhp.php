@@ -3,12 +3,12 @@
 namespace ViaWork\LeverPhp;
 
 use Exception;
-use GuzzleHttp\HandlerStack;
+use GrahamCampbell\GuzzleFactory\GuzzleFactory;
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\HandlerStack;
 use Illuminate\Support\LazyCollection;
 use Psr\Http\Message\ResponseInterface;
-use GuzzleHttp\Exception\ClientException;
-use GrahamCampbell\GuzzleFactory\GuzzleFactory;
 
 class LeverPhp
 {
@@ -39,7 +39,7 @@ class LeverPhp
                         'Accept' => 'application/json',
                     ],
                     'auth' => [$leverKey, ''],
-                    'handler' => $stack
+                    'handler' => $stack,
                 ]
             );
     }
@@ -66,14 +66,13 @@ class LeverPhp
     private function options($body)
     {
         if (isset($this->options['headers']['Content-Type']) && $this->options['headers']['Content-Type'] === 'multipart/form-data') {
-
             $options = [];
 
             foreach ($body as $key => $item) {
                 if (is_array($item)) {
                     foreach ($item as $subKey => $subItem) {
                         if (is_numeric($subKey)) {
-                            $options[] = ['name' => $key . '[]', 'contents' => $subItem];
+                            $options[] = ['name' => $key.'[]', 'contents' => $subItem];
                         }
 
                         if (is_string($subKey)) {
@@ -123,7 +122,7 @@ class LeverPhp
     {
         $response = $this->responseToArray($this->get());
 
-        if (!array_key_exists('hasNext', $response)) {
+        if (! array_key_exists('hasNext', $response)) {
             return $response['data'];
         }
 
@@ -135,12 +134,11 @@ class LeverPhp
 
                 $response['data'] = [];
 
-                if (!empty($response['next'])) {
+                if (! empty($response['next'])) {
                     $response = $this->responseToArray(
                         $this->addParameter('offset', $response['next'])->get()
                     );
                 }
-
             } while (count($response['data']) > 0);
         });
     }
@@ -182,8 +180,7 @@ class LeverPhp
      */
     public function addParameter(string $field, $value)
     {
-        if (!empty($field) && !empty($value)) {
-
+        if (! empty($field) && ! empty($value)) {
             $value = is_string($value) ? [$value] : $value;
 
             $this->options['query'][$field] = array_merge($this->options['query'][$field] ?? [], $value);
@@ -194,14 +191,14 @@ class LeverPhp
 
     public function opportunities(string $opportunityId = '')
     {
-        $this->endpoint = 'opportunities' . (empty($opportunityId) ? '' : '/' . $opportunityId);
+        $this->endpoint = 'opportunities'.(empty($opportunityId) ? '' : '/'.$opportunityId);
 
         return $this;
     }
 
     public function resumes(string $resumeId = '')
     {
-        $this->endpoint .= '/resumes' . (empty($resumeId) ? '' : '/' . $resumeId);
+        $this->endpoint .= '/resumes'.(empty($resumeId) ? '' : '/'.$resumeId);
 
         return $this;
     }
@@ -228,7 +225,7 @@ class LeverPhp
 
     public function postings(string $postingId = '')
     {
-        $this->endpoint = 'postings' . (empty($postingId) ? '' : '/' . $postingId);
+        $this->endpoint = 'postings'.(empty($postingId) ? '' : '/'.$postingId);
 
         return $this;
     }
@@ -247,13 +244,12 @@ class LeverPhp
 
     public function state(string $state)
     {
-        if (!in_array($state, ['published', 'internal', 'closed', 'draft', 'pending', 'rejected'])) {
+        if (! in_array($state, ['published', 'internal', 'closed', 'draft', 'pending', 'rejected'])) {
             throw new Exception('Not a valid state');
         }
 
         return $this->addParameter('state', $state);
     }
-
 
     /**
      * @param array|string $team
@@ -262,9 +258,7 @@ class LeverPhp
     public function team($team)
     {
         return $this->addParameter('team', $team);
-
     }
-
 
     public function hasFiles()
     {

@@ -2,12 +2,12 @@
 
 namespace ViaWork\LeverPhp\Tests;
 
-use GuzzleHttp\Middleware;
-use GuzzleHttp\HandlerStack;
-use ViaWork\LeverPhp\LeverPhp;
-use GuzzleHttp\Handler\MockHandler;
 use GrahamCampbell\GuzzleFactory\GuzzleFactory;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use ViaWork\LeverPhp\DuplicateAggregatorMiddleware;
+use ViaWork\LeverPhp\LeverPhp;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
@@ -36,13 +36,10 @@ class TestCase extends \Orchestra\Testbench\TestCase
                     'Accept' => 'application/json',
                     'Content-Type' => 'application/json',
                 ],
-                'handler' => $stack
+                'handler' => $stack,
             ]
         );
 
         $this->lever = new LeverPhp(null, $client);
     }
-
-
-
 }
