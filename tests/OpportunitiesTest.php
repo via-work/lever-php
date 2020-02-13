@@ -8,10 +8,10 @@ use Illuminate\Support\LazyCollection;
 
 class OpportunitiesTest extends TestCase
 {
-    private string $offers = __DIR__ . '/fixtures/offers.json';
-    private string $opportunity = __DIR__ . '/fixtures/opportunity.json';
-    private string $opportunities = __DIR__ . '/fixtures/opportunities.json';
-    private string $opportunitiesNextFalse = __DIR__ . '/fixtures/opportunities-hasNext-false.json';
+    private $offers = __DIR__ . '/fixtures/offers.json';
+    private $opportunity = __DIR__ . '/fixtures/opportunity.json';
+    private $opportunities = __DIR__ . '/fixtures/opportunities.json';
+    private $opportunitiesNextFalse = __DIR__ . '/fixtures/opportunities-hasNext-false.json';
 
     /** @test */
     public function automated_pagination_works_correctly_on_opportunities()
@@ -46,29 +46,29 @@ class OpportunitiesTest extends TestCase
     }
 
     /** @test */
-    public function include_and_expand_work_correctly()
+    public function add_parameters_work_correctly()
     {
         for ($i = 0; $i < 4; $i++) {
             $this->mockHandler->append(new Response(200, [], '{"data": {}}'));
         }
 
-        $this->lever->opportunities()->include('followers')->fetch();
-        $this->lever->include('followers')->opportunities()->fetch();
-        $this->lever->opportunities()->expand('applications')->fetch();
+        $this->lever->opportunities()->include('followers')->include('content')->fetch();
+        $this->lever->include(['followers', 'content'])->opportunities()->fetch();
+        $this->lever->opportunities()->expand('applications')->expand(['user', 'posting'])->fetch();
         $this->lever->include('followers')->opportunities()->expand('applications')->fetch();
 
         $this->assertEquals(
-            'opportunities?include=followers',
+            'opportunities?include=followers&include=content',
             (string)$this->container[0]['request']->getUri()
         );
 
         $this->assertEquals(
-            'opportunities?include=followers',
+            'opportunities?include=followers&include=content',
             (string)$this->container[1]['request']->getUri()
         );
 
         $this->assertEquals(
-            'opportunities?expand=applications',
+            'opportunities?expand=applications&expand=user&expand=posting',
             (string)$this->container[2]['request']->getUri()
         );
 
@@ -142,4 +142,38 @@ class OpportunitiesTest extends TestCase
             (string)$this->container[0]['request']->getUri()
         );
     }
+
+    /** @test */
+    public function uris_are_generated_correctly()
+    {
+        $this->mockHandler->append(
+            new Response(200, [], '{"data": {}}'),
+            new Response(200, [], '{"data": {}}'),
+            new Response(200, [], '{"data": {}}'),
+            );
+
+        $this->lever->opportunities('250d8f03-738a-4bba-a671-8a3d73477145')->resumes()->fetch();
+        $this->lever->opportunities('250d8f03-738a-4bba-a671-8a3d73477145')
+            ->resumes('6a1e4b79-75a3-454f-9417-ea79612b9585')->fetch();
+        $this->lever->opportunities('250d8f03-738a-4bba-a671-8a3d73477145')
+            ->resumes('6a1e4b79-75a3-454f-9417-ea79612b9585')->download()->fetch();
+
+        $this->assertEquals(
+            'opportunities/250d8f03-738a-4bba-a671-8a3d73477145/resumes',
+            (string)$this->container[0]['request']->getUri()
+        );
+
+        $this->assertEquals(
+            'opportunities/250d8f03-738a-4bba-a671-8a3d73477145/resumes/6a1e4b79-75a3-454f-9417-ea79612b9585',
+            (string)$this->container[1]['request']->getUri()
+        );
+
+        $this->assertEquals(
+            'opportunities/250d8f03-738a-4bba-a671-8a3d73477145/resumes/6a1e4b79-75a3-454f-9417-ea79612b9585/download',
+            (string)$this->container[2]['request']->getUri()
+        );
+
+    }
+
+
 }

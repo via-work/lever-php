@@ -3,6 +3,7 @@
 namespace ViaWork\LeverPhp;
 
 use Exception;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\LazyCollection;
 use Psr\Http\Message\ResponseInterface;
@@ -11,13 +12,13 @@ use GrahamCampbell\GuzzleFactory\GuzzleFactory;
 
 class LeverPhp
 {
-    private ?string $leverKey = '';
+    private $leverKey = '';
 
-    private string $endpoint = '';
+    private $endpoint = '';
 
-    private GuzzleClient $client;
+    private $client;
 
-    private array $options = ['query' => []];
+    private $options = [];
 
     /**
      * LeverPhp constructor.
@@ -28,15 +29,17 @@ class LeverPhp
     {
         $this->leverKey = $leverKey;
 
+        $stack = HandlerStack::create(DuplicateAggregatorMiddleware::buildQuery());
+
         // TODO pass RateLimiterMiddleware, check if compatible with exponential backoff
         $this->client = $client ?? GuzzleFactory::make(
                 [
                     'base_uri' => 'https://api.lever.co/v1/',
                     'headers' => [
                         'Accept' => 'application/json',
-                        'Content-Type' => 'application/json',
                     ],
-                    'auth' => [$leverKey, '']
+                    'auth' => [$leverKey, ''],
+                    'handler' => $stack
                 ]
             );
     }
@@ -44,14 +47,13 @@ class LeverPhp
     private function reset()
     {
         $this->endpoint = '';
-        $this->options = ['query' => []];
+        $this->options = [];
     }
 
     private function post(array $body): ResponseInterface
     {
         try {
-            $response = $this->client->post($this->endpoint,
-                array_merge(array('json' => $body), $this->options));
+            $response = $this->client->post($this->endpoint, $this->options($body));
         } catch (ClientException $exception) {
             throw $exception;
         } finally {
@@ -59,6 +61,36 @@ class LeverPhp
         }
 
         return $response;
+    }
+
+    private function options($body)
+    {
+        if (isset($this->options['headers']['Content-Type']) && $this->options['headers']['Content-Type'] === 'multipart/form-data') {
+
+            $options = [];
+
+            foreach ($body as $key => $item) {
+                if (is_array($item)) {
+                    foreach ($item as $subKey => $subItem) {
+                        if (is_numeric($subKey)) {
+                            $options[] = ['name' => $key . '[]', 'contents' => $subItem];
+                        }
+
+                        if (is_string($subKey)) {
+                            $options[] = ['name' => "{$key}[{$subKey}]", 'contents' => $subItem];
+                        }
+                    }
+                }
+
+                if (is_string($item)) {
+                    $options[] = ['name' => $key, 'contents' => $item];
+                }
+            }
+
+            return array_merge(['multipart' => $options], $this->options);
+        }
+
+        return array_merge(['json' => $body], $this->options);
     }
 
     private function get(): ResponseInterface
@@ -128,7 +160,7 @@ class LeverPhp
         return json_decode($response->getBody()->getContents(), true);
     }
 
-    public function expand(string $expandable)
+    public function expand($expandable)
     {
         return $this->addParameter('expand', $expandable);
     }
@@ -138,7 +170,7 @@ class LeverPhp
         return $this->addParameter('perform_as', $userId);
     }
 
-    public function include(string $includable)
+    public function include($includable)
     {
         return $this->addParameter('include', $includable);
     }
@@ -151,9 +183,10 @@ class LeverPhp
     public function addParameter(string $field, $value)
     {
         if (!empty($field) && !empty($value)) {
-            $this->options['query'][$field] = is_array($value)
-                ? implode(',', $value)
-                : $value;
+
+            $value = is_string($value) ? [$value] : $value;
+
+            $this->options['query'][$field] = array_merge($this->options['query'][$field] ?? [], $value);
         }
 
         return $this;
@@ -162,6 +195,20 @@ class LeverPhp
     public function opportunities(string $opportunityId = '')
     {
         $this->endpoint = 'opportunities' . (empty($opportunityId) ? '' : '/' . $opportunityId);
+
+        return $this;
+    }
+
+    public function resumes(string $resumeId = '')
+    {
+        $this->endpoint .= '/resumes' . (empty($resumeId) ? '' : '/' . $resumeId);
+
+        return $this;
+    }
+
+    public function download()
+    {
+        $this->endpoint .= '/download';
 
         return $this;
     }
@@ -179,4 +226,39 @@ class LeverPhp
         return $this;
     }
 
+    public function postings(string $postingId = '')
+    {
+        $this->endpoint = 'postings' . (empty($postingId) ? '' : '/' . $postingId);
+
+        return $this;
+    }
+
+    public function state(string $state)
+    {
+        if (!in_array($state, ['published', 'internal', 'closed', 'draft', 'pending', 'rejected'])) {
+            throw new Exception('Not a valid state');
+        }
+
+        return $this->addParameter('state', $state);
+    }
+
+
+    /**
+     * @param array|string $team
+     * @return $this
+     */
+    public function team($team)
+    {
+        return $this->addParameter('team', $team);
+
+    }
+
+    //apply
+
+    public function hasFiles()
+    {
+        $this->options['headers'] = ['Content-Type' => 'multipart/form-data'];
+
+        return $this;
+    }
 }
