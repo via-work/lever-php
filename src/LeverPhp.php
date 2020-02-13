@@ -87,7 +87,6 @@ class LeverPhp
                 }
             }
 
-
             return array_merge(['multipart' => $options], $this->options);
         }
 
