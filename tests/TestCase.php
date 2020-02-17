@@ -3,9 +3,11 @@
 namespace ViaWork\LeverPhp\Tests;
 
 use GrahamCampbell\GuzzleFactory\GuzzleFactory;
+use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
+use Spatie\GuzzleRateLimiterMiddleware\RateLimiterMiddleware;
 use ViaWork\LeverPhp\DuplicateAggregatorMiddleware;
 use ViaWork\LeverPhp\LeverPhp;
 
@@ -17,28 +19,33 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
     protected $container;
 
+    const BACKOFF_TEST = 100;
+
     protected function setUp(): void
     {
         $this->mockHandler = new MockHandler();
 
         $this->container = [];
 
-        $stack = HandlerStack::create($this->mockHandler);
+        $mock = HandlerStack::create($this->mockHandler);
 
-        $stack->push(DuplicateAggregatorMiddleware::buildQuery());
+        $mock->push(DuplicateAggregatorMiddleware::buildQuery());
+
+        $mock->push(RateLimiterMiddleware::perSecond(1));
+
+        $stack = GuzzleFactory::handler(self::BACKOFF_TEST, null, $mock);
 
         $stack->push(Middleware::history($this->container));
 
-        $client = GuzzleFactory::make(
-            [
-                'base_uri' => '',
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Content-Type' => 'application/json',
-                ],
-                'handler' => $stack,
-            ]
-        );
+
+        $client = new Client([
+            'base_uri' => '',
+            'headers' => [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ],
+            'handler' => $stack,
+        ]);
 
         $this->lever = new LeverPhp(null, $client);
     }
