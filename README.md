@@ -170,6 +170,15 @@ When item hundred is reached, another call is made to the API requesting the nex
 
 Of course you can take advantage of all [methods available](https://laravel.com/docs/6.x/collections#the-enumerable-contract) on the LazyCollection class. 
 
+#### Rate Limit and Exponential Backoff
+By default, Lever API allows a steady state number of 10 requests/second per API key. 
+
+To comply with this, **LeverPhp** automatically limits the number of requests to the Lever Data API to 10 per second and uses [exponential backoff](https://en.wikipedia.org/wiki/Exponential_backoff) to decrease the retry rate when a 429 or 500 response is received. Please plan you code accordingly, as a request might take much longer than expected because of this. Using some kind of queues is suggested. 
+
+>By default, the rate limiter works in memory. This means that if you have a second PHP process (or Guzzle client) consuming the same API, you'd still possibly hit the rate limit. 
+
+The `LeverPhp()` constructor accepts a custom store in its third parameter to overcome the in memory issue. If you are using Laravel, a custom store that uses your cache driver is already configured. Please see the documentation of [GuzzleRateLimiterMiddleware](https://github.com/spatie/guzzle-rate-limiter-middleware#custom-stores) if you need more information.
+
 #### Client
 
 If a method is not available for the resource you are trying to reach, you can get an instance of the Guzzle client directly by calling `Lever::client()`. Feel free to add it to the source code. Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
