@@ -8,8 +8,10 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\HandlerStack;
 use Illuminate\Support\LazyCollection;
+use MyApp\LaravelRateLimiterStore;
 use Psr\Http\Message\ResponseInterface;
 use Spatie\GuzzleRateLimiterMiddleware\RateLimiterMiddleware;
+use Spatie\GuzzleRateLimiterMiddleware\Store;
 
 class LeverPhp
 {
@@ -27,14 +29,15 @@ class LeverPhp
      * LeverPhp constructor.
      * @param string|null $leverKey
      * @param GuzzleClient|null $client
+     * @param Store|null $store
      */
-    public function __construct(string $leverKey = null, GuzzleClient $client = null)
+    public function __construct(string $leverKey = null, GuzzleClient $client = null, Store $store = null)
     {
         $this->leverKey = $leverKey;
 
         $stack = HandlerStack::create(DuplicateAggregatorMiddleware::buildQuery());
 
-        $stack->push(RateLimiterMiddleware::perSecond(10));
+        $stack->push(RateLimiterMiddleware::perSecond(10, $store));
 
         $this->client = $client ?? GuzzleFactory::make(
                 [

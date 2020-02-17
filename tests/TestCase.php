@@ -47,6 +47,6 @@ class TestCase extends \Orchestra\Testbench\TestCase
             'handler' => $stack,
         ]);
 
-        $this->lever = new LeverPhp(null, $client);
+        $this->lever = new LeverPhp(null, $client, null);
     }
 }
