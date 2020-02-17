@@ -1,6 +1,6 @@
 <?php
 
-namespace MyApp;
+namespace ViaWork\LeverPhp;
 
 use Spatie\GuzzleRateLimiterMiddleware\Store;
 use Illuminate\Support\Facades\Cache;

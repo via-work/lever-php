@@ -3,7 +3,6 @@
 namespace ViaWork\LeverPhp;
 
 use Illuminate\Support\ServiceProvider;
-use MyApp\LaravelRateLimiterStore;
 use ViaWork\LeverPhp\Facade\Lever;
 
 class LeverPhpServiceProvider extends ServiceProvider
