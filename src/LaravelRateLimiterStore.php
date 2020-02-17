@@ -2,8 +2,8 @@
 
 namespace MyApp;
 
-use Spatie\GuzzleRateLimiterMiddleware\Store;
 use Illuminate\Support\Facades\Cache;
+use Spatie\GuzzleRateLimiterMiddleware\Store;
 
 class LaravelRateLimiterStore implements Store
 {
