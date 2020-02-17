@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\HandlerStack;
 use Illuminate\Support\LazyCollection;
 use Psr\Http\Message\ResponseInterface;
+use Spatie\GuzzleRateLimiterMiddleware\RateLimiterMiddleware;
 
 class LeverPhp
 {
@@ -33,7 +34,8 @@ class LeverPhp
 
         $stack = HandlerStack::create(DuplicateAggregatorMiddleware::buildQuery());
 
-        // TODO pass RateLimiterMiddleware, check if compatible with exponential backoff
+        $stack->push(RateLimiterMiddleware::perSecond(10));
+
         $this->client = $client ?? GuzzleFactory::make(
                 [
                     'base_uri' => 'https://api.lever.co/v1/',
