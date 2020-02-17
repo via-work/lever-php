@@ -34,7 +34,9 @@ class LeverPhp
     {
         $this->leverKey = $leverKey;
 
-        $stack = HandlerStack::create(DuplicateAggregatorMiddleware::buildQuery());
+        $stack = HandlerStack::create();
+
+        $stack->push(DuplicateAggregatorMiddleware::buildQuery());
 
         $stack->push(RateLimiterMiddleware::perSecond(10, $store));
 
