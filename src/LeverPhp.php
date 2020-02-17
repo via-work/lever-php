@@ -12,6 +12,8 @@ use Psr\Http\Message\ResponseInterface;
 
 class LeverPhp
 {
+    const BACKOFF_TIME = 1500;
+
     private $leverKey = '';
 
     private $endpoint = '';
@@ -41,7 +43,7 @@ class LeverPhp
                     'auth' => [$leverKey, ''],
                     'handler' => $stack,
                 ],
-                1500
+                self::BACKOFF_TIME
             );
     }
 
