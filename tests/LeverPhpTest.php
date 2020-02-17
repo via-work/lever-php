@@ -2,8 +2,8 @@
 
 namespace ViaWork\LeverPhp\Tests;
 
-use ReflectionClass;
 use GuzzleHttp\Psr7\Response;
+use ReflectionClass;
 use ViaWork\LeverPhp\LeverPhp;
 
 class LeverPhpTest extends TestCase
@@ -139,6 +139,4 @@ class LeverPhpTest extends TestCase
 
         $this->assertCount(4, $this->container);
     }
-
-
 }
