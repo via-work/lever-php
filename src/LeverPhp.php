@@ -40,7 +40,8 @@ class LeverPhp
                     ],
                     'auth' => [$leverKey, ''],
                     'handler' => $stack,
-                ]
+                ],
+                1500
             );
     }
 
