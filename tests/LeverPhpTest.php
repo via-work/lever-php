@@ -3,6 +3,7 @@
 namespace ViaWork\LeverPhp\Tests;
 
 use ReflectionClass;
+use GuzzleHttp\Psr7\Response;
 use ViaWork\LeverPhp\LeverPhp;
 
 class LeverPhpTest extends TestCase
@@ -117,4 +118,27 @@ class LeverPhpTest extends TestCase
 
         $this->assertEquals(['json' => $body], $output);
     }
+
+    /** @test */
+    public function check_exponential_backoff_works()
+    {
+        $this->mockHandler->append(
+            new Response(429, [], '{"data": {}}'),
+            new Response(429, [], '{"data": {}}'),
+            new Response(429, [], '{"data": {}}'),
+            new Response(200, [], '{"data": {}}'),
+            );
+
+        $this->lever->opportunities()->fetch();
+
+        foreach ($this->container as $item) {
+            if (array_key_exists('delay', $item['options'])) {
+                $this->assertEquals(pow(2, $item['options']['retries']) * self::BACKOFF_TEST, $item['options']['delay']);
+            }
+        }
+
+        $this->assertCount(4, $this->container);
+    }
+
+
 }

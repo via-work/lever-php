@@ -24,10 +24,11 @@
     ],
     "require": {
         "php": "^7.3",
+        "ext-json": "*",
         "graham-campbell/guzzle-factory": "^3.0",
         "guzzlehttp/guzzle": "^6.5",
         "illuminate/support": "^6.0",
-        "ext-json": "*"
+        "spatie/guzzle-rate-limiter-middleware": "^1.0"
     },
     "require-dev": {
         "orchestra/testbench": "^4.0",
