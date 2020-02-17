@@ -37,7 +37,6 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
         $stack->push(Middleware::history($this->container));
 
-
         $client = new Client([
             'base_uri' => '',
             'headers' => [
