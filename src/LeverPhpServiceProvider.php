@@ -38,6 +38,6 @@ class LeverPhpServiceProvider extends ServiceProvider
             return new LeverPhp(config('lever.key'));
         });
 
-        $this->app->alias(Lever::class, 'newsletter');
+        $this->app->alias(Lever::class, 'Lever');
     }
 }
