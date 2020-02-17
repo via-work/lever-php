@@ -29,7 +29,9 @@ class LeverPhp
     {
         $this->leverKey = $leverKey;
 
-        $stack = HandlerStack::create(DuplicateAggregatorMiddleware::buildQuery());
+        $stack = HandlerStack::create();
+
+        $stack->push(DuplicateAggregatorMiddleware::buildQuery());
 
         // TODO pass RateLimiterMiddleware, check if compatible with exponential backoff
         $this->client = $client ?? GuzzleFactory::make(
