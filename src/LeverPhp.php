@@ -109,6 +109,7 @@ class LeverPhp
             }
 
             unset($this->options['hasFiles']);
+
             return array_merge(['multipart' => $options], $this->options);
         }
 

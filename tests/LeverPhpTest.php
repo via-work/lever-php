@@ -22,7 +22,7 @@ class LeverPhpTest extends TestCase
             'resumeFile' => [
                 'file' => 'file-content-example',
                 'type' => 'application/pdf',
-                'name' => 'resume.pdf'
+                'name' => 'resume.pdf',
             ],
             'phones' => [
                 [
@@ -63,8 +63,8 @@ class LeverPhpTest extends TestCase
                     'contents' => 'file-content-example',
                     'filename' => 'resume.pdf',
                     'headers' => [
-                        'Content-Type' => 'application/pdf'
-                    ]
+                        'Content-Type' => 'application/pdf',
+                    ],
                 ],
                 [
                     'name' => 'phones[]',
@@ -89,7 +89,7 @@ class LeverPhpTest extends TestCase
                     'name' => 'archived[archivedAt]',
                     'contents' => 146687167166,
                 ],
-            ]
+            ],
         ];
 
         $output = $method->invokeArgs($this->lever->hasFiles(), [$body]);
