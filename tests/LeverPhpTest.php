@@ -22,7 +22,17 @@ class LeverPhpTest extends TestCase
             'resumeFile' => [
                 'file' => 'file-content-example',
                 'type' => 'application/pdf',
-                'name' => 'resume.pdf'
+                'name' => 'resume1.pdf'
+            ],
+            'file' => [
+                'file' => 'file-content-example',
+                'type' => 'application/pdf',
+                'name' => 'resume2.pdf'
+            ],
+            'files' => [
+                'file' => 'file-content-example',
+                'type' => 'application/pdf',
+                'name' => 'resume3.pdf'
             ],
             'phones' => [
                 [
@@ -61,7 +71,23 @@ class LeverPhpTest extends TestCase
                 [
                     'name' => 'resumeFile',
                     'contents' => 'file-content-example',
-                    'filename' => 'resume.pdf',
+                    'filename' => 'resume1.pdf',
+                    'headers' => [
+                        'Content-Type' => 'application/pdf'
+                    ]
+                ],
+                [
+                    'name' => 'file',
+                    'contents' => 'file-content-example',
+                    'filename' => 'resume2.pdf',
+                    'headers' => [
+                        'Content-Type' => 'application/pdf'
+                    ]
+                ],
+                [
+                    'name' => 'files',
+                    'contents' => 'file-content-example',
+                    'filename' => 'resume3.pdf',
                     'headers' => [
                         'Content-Type' => 'application/pdf'
                     ]
