@@ -141,18 +141,24 @@ Be aware that when using the same field name, the new value will be appended and
 
 #### Uploading files and resumes
 
-LeverPhp allows you to include resumes or files when available. To do this, you simply have to include the file in the fields array, using the same names as in Lever and chaining the `hasFiles()` method (before the `create` or `update` method!). For example, you can append a resume when creating an opportunity: 
+LeverPhp allows you to include resumes or files when available. To do this, you have to include the file in the fields array (see example) and chaining the `hasFiles()` method (before the `create` or `update` method!). For example, you can append a resume when creating an opportunity: 
 
 
 ``` php
 $newOpportunity = [
                    'name' => 'Shane Smith',
                    'headline' => 'Brickly LLC, Vandelay Industries, Inc, Central Perk',
-                   'resumeFile' => fopen('/path/to/resume.pdf', 'r')
+                   'resumeFile' => [
+                        'file' => file_get_contents('path/to/resume.pdf'),
+                        'name' => 'resume.pdf' 
+                        'type' => mime_content_type('path/to/resume.pdf'), // application/pdf
+                        ] 
                   ];
 
 Lever::opportunities()->hasFiles()->create($newOpportunity);
 ```
+
+Currently, there is no support for multiple files in one call.
 
 #### Pagination
 
@@ -171,6 +177,7 @@ When item hundred is reached, another call is made to the API requesting the nex
 Of course you can take advantage of all [methods available](https://laravel.com/docs/6.x/collections#the-enumerable-contract) on the LazyCollection class. 
 
 #### Rate Limit and Exponential Backoff
+
 By default, Lever API allows a steady state number of 10 requests/second per API key. 
 
 To comply with this, **LeverPhp** automatically limits the number of requests to the Lever Data API to 10 per second and uses [exponential backoff](https://en.wikipedia.org/wiki/Exponential_backoff) to decrease the retry rate when a 429 or 500 response is received. Please plan you code accordingly, as a request might take much longer than expected because of this. Using some kind of queues is suggested. 
