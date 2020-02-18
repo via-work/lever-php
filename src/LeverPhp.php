@@ -74,10 +74,23 @@ class LeverPhp
 
     private function options($body)
     {
-        if (isset($this->options['headers']['Content-Type']) && $this->options['headers']['Content-Type'] === 'multipart/form-data') {
+        if (isset($this->options['hasFiles'])) {
             $options = [];
 
             foreach ($body as $key => $item) {
+
+                // TODO add support for files[] and automate filename and headers fields.
+                if (in_array($key, ['file', 'files', 'resumeFile'])) {
+                    $options[] = [
+                        'name' => $key,
+                        'contents' => $item['file'],
+                        'filename' =>  $item['name'],
+                        'headers' => ['Content-Type' => $item['type']],
+                    ];
+
+                    continue;
+                }
+
                 if (is_array($item)) {
                     foreach ($item as $subKey => $subItem) {
                         if (is_numeric($subKey)) {
@@ -94,6 +107,8 @@ class LeverPhp
                     $options[] = ['name' => $key, 'contents' => $item];
                 }
             }
+
+            unset($this->options['hasFiles']);
 
             return array_merge(['multipart' => $options], $this->options);
         }
@@ -271,7 +286,7 @@ class LeverPhp
 
     public function hasFiles()
     {
-        $this->options['headers'] = ['Content-Type' => 'multipart/form-data'];
+        $this->options['hasFiles'] = true;
 
         return $this;
     }
