@@ -74,7 +74,7 @@ class LeverPhp
 
     private function options($body)
     {
-        if (isset($this->options['headers']['Content-Type']) && $this->options['headers']['Content-Type'] === 'multipart/form-data') {
+        if (isset($this->options['hasFiles'])) {
             $options = [];
 
             foreach ($body as $key => $item) {
@@ -95,6 +95,7 @@ class LeverPhp
                 }
             }
 
+            unset($this->options['hasFiles']);
             return array_merge(['multipart' => $options], $this->options);
         }
 
@@ -271,7 +272,7 @@ class LeverPhp
 
     public function hasFiles()
     {
-        $this->options['headers'] = ['Content-Type' => 'multipart/form-data'];
+        $this->options['hasFiles'] = true;
 
         return $this;
     }
