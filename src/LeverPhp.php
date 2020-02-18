@@ -284,6 +284,23 @@ class LeverPhp
         return $this->addParameter('team', $team);
     }
 
+    /**
+     * @param array|string $department
+     * @return $this
+     */
+    public function department($department)
+    {
+        return $this->addParameter('department', $department);
+    }
+
+    /**
+     * @return $this
+     */
+    public function parse()
+    {
+        return $this->addParameter('parse', 'true');
+    }
+
     public function hasFiles()
     {
         $this->options['hasFiles'] = true;
