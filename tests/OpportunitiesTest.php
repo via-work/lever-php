@@ -173,4 +173,21 @@ class OpportunitiesTest extends TestCase
             (string) $this->container[2]['request']->getUri()
         );
     }
+
+    /** @test */
+    public function retrieve_a_single_opportunity_with_email()
+    {
+        $this->mockHandler->append(
+            new Response(200, [], file_get_contents($this->opportunity)),
+            );
+
+        $opportunity = $this->lever->opportunities()->email('shane@exampleq3.com')->fetch();
+
+        $this->assertIsArray($opportunity);
+
+        $this->assertEquals(
+            'opportunities?email=shane%40exampleq3.com',
+            (string) $this->container[0]['request']->getUri()
+        );
+    }
 }
