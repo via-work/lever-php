@@ -307,4 +307,13 @@ class LeverPhp
 
         return $this;
     }
+
+    /**
+     * @param array|string $email
+     * @return $this
+     */
+    public function email($email)
+    {
+        return $this->addParameter('email', $email);
+    }
 }
