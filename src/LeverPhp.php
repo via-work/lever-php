@@ -316,4 +316,22 @@ class LeverPhp
     {
         return $this->addParameter('email', $email);
     }
+
+    /**
+     * @param array|string $stageId
+     * @return $this
+     */
+    public function stage($stageId)
+    {
+        return $this->addParameter('stage_id', $stageId);
+    }
+
+    /**
+     * @param array|string $postingId
+     * @return $this
+     */
+    public function posting($postingId)
+    {
+        return $this->addParameter('posting_id', $postingId);
+    }
 }

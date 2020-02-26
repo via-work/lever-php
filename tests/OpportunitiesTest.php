@@ -190,4 +190,36 @@ class OpportunitiesTest extends TestCase
             (string) $this->container[0]['request']->getUri()
         );
     }
+
+    public function retrieve_opportunities_with_stage()
+    {
+        $this->mockHandler->append(
+            new Response(200, [], file_get_contents($this->opportunity)),
+            );
+
+        $opportunities = $this->lever->opportunities()->stage('00922a60-7c15-422b-b086-f62000824fd7')->fetch();
+
+        $this->assertIsArray($opportunities);
+
+        $this->assertEquals(
+            'opportunities?stage_id=00922a60-7c15-422b-b086-f62000824fd7',
+            (string) $this->container[0]['request']->getUri()
+        );
+    }
+
+    public function retrieve_opportunities_with_posting()
+    {
+        $this->mockHandler->append(
+            new Response(200, [], file_get_contents($this->opportunity)),
+            );
+
+        $opportunities = $this->lever->opportunities()->posting('00922a60-7c15-422b-b086-f62000824fd7')->fetch();
+
+        $this->assertIsArray($opportunities);
+
+        $this->assertEquals(
+            'opportunities?posting_id=00922a60-7c15-422b-b086-f62000824fd7',
+            (string) $this->container[0]['request']->getUri()
+        );
+    }
 }
