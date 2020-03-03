@@ -129,9 +129,9 @@ class LeverPhp
         return $response;
     }
 
-    public function create(array $body): array
+    public function create(array $body, string $method = 'post'): array
     {
-        $response = $this->responseToArray($this->post($body));
+        $response = $this->responseToArray($this->{$method}($body));
 
         return $response['data'];
     }
@@ -139,6 +139,11 @@ class LeverPhp
     public function update(array $body): array
     {
         return $this->create($body);
+    }
+
+    public function putUpdate(array $body): array
+    {
+        return $this->create($body, 'put');
     }
 
     /** @return LazyCollection|array */
