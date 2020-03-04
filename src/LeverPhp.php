@@ -129,6 +129,19 @@ class LeverPhp
         return $response;
     }
 
+    private function put(array $body): ResponseInterface
+    {
+        try {
+            $response = $this->client->put($this->endpoint, $this->options($body));
+        } catch (ClientException $exception) {
+            throw $exception;
+        } finally {
+            $this->reset();
+        }
+
+        return $response;
+    }
+
     public function create(array $body, string $method = 'post'): array
     {
         $response = $this->responseToArray($this->{$method}($body));
