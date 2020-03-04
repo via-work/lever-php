@@ -234,5 +234,4 @@ class OpportunitiesTest extends TestCase
             (string) $this->container[0]['request']->getUri()
         );
     }
-
 }
