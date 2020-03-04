@@ -357,6 +357,13 @@ class LeverPhp
         return $this->addParameter('stage_id', $stageId);
     }
 
+    public function archived()
+    {
+        $this->endpoint .= '/archived';
+
+        return $this;
+    }
+
     /**
      * @param array|string $postingId
      * @return $this
