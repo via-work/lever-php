@@ -191,11 +191,10 @@ class OpportunitiesTest extends TestCase
         );
     }
 
+    /** @test */
     public function retrieve_opportunities_with_stage()
     {
-        $this->mockHandler->append(
-            new Response(200, [], file_get_contents($this->opportunity)),
-            );
+        $this->mockHandler->append(new Response(200, [], '{"data": {}}'));
 
         $opportunities = $this->lever->opportunities()->stage('00922a60-7c15-422b-b086-f62000824fd7')->fetch();
 
@@ -207,11 +206,10 @@ class OpportunitiesTest extends TestCase
         );
     }
 
+    /** @test */
     public function retrieve_opportunities_with_posting()
     {
-        $this->mockHandler->append(
-            new Response(200, [], file_get_contents($this->opportunity)),
-            );
+        $this->mockHandler->append(new Response(200, [], '{"data": {}}'));
 
         $opportunities = $this->lever->opportunities()->posting('00922a60-7c15-422b-b086-f62000824fd7')->fetch();
 
@@ -222,4 +220,19 @@ class OpportunitiesTest extends TestCase
             (string) $this->container[0]['request']->getUri()
         );
     }
+
+    /** @test */
+    public function check_archived_reason_is_added_correctly_to_body()
+    {
+        $this->mockHandler->append(new Response(200, [], '{"data": {}}'));
+
+        $opportunities = $this->lever->opportunities()->archived()
+            ->putUpdate(['reason' => '63dd55b2-a99f-4e7b-985f-22c7bf80ab42']);
+
+        $this->assertEquals(
+            'opportunities/archived',
+            (string) $this->container[0]['request']->getUri()
+        );
+    }
+
 }
