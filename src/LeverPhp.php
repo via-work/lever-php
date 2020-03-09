@@ -249,7 +249,7 @@ class LeverPhp
     {
         $this->endpoint .= '/download';
 
-        return $this;
+        return $this->get()->getBody();
     }
 
     public function offers()
