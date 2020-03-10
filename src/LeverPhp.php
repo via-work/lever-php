@@ -363,7 +363,7 @@ class LeverPhp
 
         return $this;
     }
-
+  
     public function notes(string $noteId = '')
     {
         $this->endpoint = 'notes'.(empty($noteId) ? '' : '/'.$noteId);
