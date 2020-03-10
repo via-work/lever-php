@@ -150,6 +150,7 @@ class OpportunitiesTest extends TestCase
             new Response(200, [], '{"data": {}}'),
             new Response(200, [], '{"data": {}}'),
             new Response(200, [], '{"data": {}}'),
+            new Response(200, [], '{"data": {}}'),
             );
 
         $this->lever->opportunities('250d8f03-738a-4bba-a671-8a3d73477145')->resumes()->fetch();
@@ -157,6 +158,8 @@ class OpportunitiesTest extends TestCase
             ->resumes('6a1e4b79-75a3-454f-9417-ea79612b9585')->fetch();
         $this->lever->opportunities('250d8f03-738a-4bba-a671-8a3d73477145')
             ->resumes('6a1e4b79-75a3-454f-9417-ea79612b9585')->download();
+        $this->lever->opportunities('250d8f03-738a-4bba-a671-8a3d73477145')
+            ->notes()->create([]);
 
         $this->assertEquals(
             'opportunities/250d8f03-738a-4bba-a671-8a3d73477145/resumes',
@@ -171,6 +174,11 @@ class OpportunitiesTest extends TestCase
         $this->assertEquals(
             'opportunities/250d8f03-738a-4bba-a671-8a3d73477145/resumes/6a1e4b79-75a3-454f-9417-ea79612b9585/download',
             (string) $this->container[2]['request']->getUri()
+        );
+
+        $this->assertEquals(
+            'opportunities/250d8f03-738a-4bba-a671-8a3d73477145/notes',
+            (string) $this->container[3]['request']->getUri()
         );
     }
 
