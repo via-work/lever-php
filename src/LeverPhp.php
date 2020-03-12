@@ -74,6 +74,12 @@ class LeverPhp
 
     private function options($body)
     {
+        if (isset($this->options['query'])) {
+            $this->options['query'] = preg_replace('/%5B[0-9]%5D/', '',
+                http_build_query($this->options['query'])
+            );
+        }
+
         if (isset($this->options['hasFiles'])) {
             $options = [];
 
@@ -84,7 +90,7 @@ class LeverPhp
                     $options[] = [
                         'name' => $key,
                         'contents' => $item['file'],
-                        'filename' =>  $item['name'],
+                        'filename' => $item['name'],
                         'headers' => ['Content-Type' => $item['type']],
                     ];
 
@@ -119,7 +125,7 @@ class LeverPhp
     private function get(): ResponseInterface
     {
         try {
-            $response = $this->client->get($this->endpoint, $this->options);
+            $response = $this->client->get($this->endpoint, $this->options([]));
         } catch (ClientException $exception) {
             throw $exception;
         } finally {
@@ -178,7 +184,7 @@ class LeverPhp
 
                 if (! empty($response['next'])) {
                     $response = $this->responseToArray(
-                        $this->addParameter('offset', $response['next'])->get()
+                        $this->postings()->addParameter('offset', $response['next'])->get()
                     );
                 }
             } while (count($response['data']) > 0);
