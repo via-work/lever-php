@@ -74,6 +74,12 @@ class LeverPhp
 
     private function options($body)
     {
+        if (isset($this->options['query'])) {
+            $this->options['query'] = preg_replace('/%5B[0-9]%5D/', '',
+                http_build_query($this->options['query'])
+            );
+        }
+
         if (isset($this->options['hasFiles'])) {
             $options = [];
 
@@ -84,7 +90,7 @@ class LeverPhp
                     $options[] = [
                         'name' => $key,
                         'contents' => $item['file'],
-                        'filename' =>  $item['name'],
+                        'filename' => $item['name'],
                         'headers' => ['Content-Type' => $item['type']],
                     ];
 
@@ -94,7 +100,7 @@ class LeverPhp
                 if (is_array($item)) {
                     foreach ($item as $subKey => $subItem) {
                         if (is_numeric($subKey)) {
-                            $options[] = ['name' => $key.'[]', 'contents' => $subItem];
+                            $options[] = ['name' => $key . '[]', 'contents' => $subItem];
                         }
 
                         if (is_string($subKey)) {
@@ -119,7 +125,7 @@ class LeverPhp
     private function get(): ResponseInterface
     {
         try {
-            $response = $this->client->get($this->endpoint, $this->options);
+            $response = $this->client->get($this->endpoint, $this->options([]));
         } catch (ClientException $exception) {
             throw $exception;
         } finally {
@@ -164,7 +170,7 @@ class LeverPhp
     {
         $response = $this->responseToArray($this->get());
 
-        if (! array_key_exists('hasNext', $response)) {
+        if (!array_key_exists('hasNext', $response)) {
             return $response['data'];
         }
 
@@ -176,9 +182,9 @@ class LeverPhp
 
                 $response['data'] = [];
 
-                if (! empty($response['next'])) {
+                if (!empty($response['next'])) {
                     $response = $this->responseToArray(
-                        $this->addParameter('offset', $response['next'])->get()
+                        $this->postings()->addParameter('offset', $response['next'])->get()
                     );
                 }
             } while (count($response['data']) > 0);
@@ -222,7 +228,7 @@ class LeverPhp
      */
     public function addParameter(string $field, $value)
     {
-        if (! empty($field) && ! empty($value)) {
+        if (!empty($field) && !empty($value)) {
             $value = is_string($value) ? [$value] : $value;
 
             $this->options['query'][$field] = array_merge($this->options['query'][$field] ?? [], $value);
@@ -233,14 +239,14 @@ class LeverPhp
 
     public function opportunities(string $opportunityId = '')
     {
-        $this->endpoint = 'opportunities'.(empty($opportunityId) ? '' : '/'.$opportunityId);
+        $this->endpoint = 'opportunities' . (empty($opportunityId) ? '' : '/' . $opportunityId);
 
         return $this;
     }
 
     public function resumes(string $resumeId = '')
     {
-        $this->endpoint .= '/resumes'.(empty($resumeId) ? '' : '/'.$resumeId);
+        $this->endpoint .= '/resumes' . (empty($resumeId) ? '' : '/' . $resumeId);
 
         return $this;
     }
@@ -280,7 +286,7 @@ class LeverPhp
 
     public function postings(string $postingId = '')
     {
-        $this->endpoint = 'postings'.(empty($postingId) ? '' : '/'.$postingId);
+        $this->endpoint = 'postings' . (empty($postingId) ? '' : '/' . $postingId);
 
         return $this;
     }
@@ -299,7 +305,7 @@ class LeverPhp
 
     public function state(string $state)
     {
-        if (! in_array($state, ['published', 'internal', 'closed', 'draft', 'pending', 'rejected'])) {
+        if (!in_array($state, ['published', 'internal', 'closed', 'draft', 'pending', 'rejected'])) {
             throw new Exception('Not a valid state');
         }
 
@@ -366,7 +372,7 @@ class LeverPhp
 
     public function notes(string $noteId = '')
     {
-        $this->endpoint .= '/notes'.(empty($noteId) ? '' : '/'.$noteId);
+        $this->endpoint .= '/notes' . (empty($noteId) ? '' : '/' . $noteId);
 
         return $this;
     }
