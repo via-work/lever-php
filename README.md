@@ -113,7 +113,7 @@ When a resource depends on another one to work, you can simply chain the methods
 Lever::opportunities('250d8f03-738a-4bba-a671-8a3d73477145')->offers()->fetch();
 ```
 
-
+When Lever asks to use the PUT verb, you can use `putUpdate()` instead of `update()` (POST).
 
 #### Parameters
 
