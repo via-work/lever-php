@@ -183,8 +183,10 @@ class LeverPhp
                 $response['data'] = [];
 
                 if (! empty($response['next'])) {
+                    $offset = json_decode(urldecode($response['next']));
+
                     $response = $this->responseToArray(
-                        $this->postings()->addParameter('offset', $response['next'])->get()
+                        $this->postings()->addParameter('offset', implode(',', $offset))->get()
                     );
                 }
             } while (count($response['data']) > 0);
