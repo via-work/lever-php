@@ -168,17 +168,26 @@ class LeverPhp
     /** @return LazyCollection|array */
     public function fetch()
     {
+        $endpoint = $this->endpoint;
+        $options = $this->options;
+
         $response = $this->responseToArray($this->get());
 
         if (! array_key_exists('hasNext', $response)) {
             return $response['data'];
         }
 
-        return LazyCollection::make(function () use ($response) {
+
+        return LazyCollection::make(function () use ($response, $endpoint, $options) {
             do {
                 foreach ($response['data'] as $item) {
                     yield $item;
                 }
+
+                $this->endpoint = $endpoint;
+                $this->options = $options;
+
+                unset($this->options['offset']);
 
                 $response['data'] = [];
 
@@ -186,7 +195,7 @@ class LeverPhp
                     $offset = json_decode(urldecode($response['next']));
 
                     $response = $this->responseToArray(
-                        $this->postings()->addParameter('offset', implode(',', $offset))->get()
+                        $this->addParameter('offset', $response['next'])->get()
                     );
                 }
             } while (count($response['data']) > 0);
