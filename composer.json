@@ -27,11 +27,11 @@
         "ext-json": "*",
         "graham-campbell/guzzle-factory": "^3.0",
         "guzzlehttp/guzzle": "^6.5",
-        "illuminate/support": "^6.0",
+        "illuminate/support": "^6.0|^7.0",
         "spatie/guzzle-rate-limiter-middleware": "^1.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^4.0",
+        "orchestra/testbench": "^4.0|^5.0",
         "phpunit/phpunit": "^8.0"
     },
     "autoload": {
