@@ -396,4 +396,16 @@ class LeverPhp
     {
         return $this->addParameter('posting_id', $postingId);
     }
+
+    /**
+     * url to add opportunity tags
+     * @return $this
+     */
+
+    public function tags()
+    {
+        $this->endpoint .= '/addTags';
+
+        return $this;
+    }
 }
