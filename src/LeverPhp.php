@@ -397,10 +397,9 @@ class LeverPhp
     }
 
     /**
-     * url to add opportunity tags
+     * url to add opportunity tags.
      * @return $this
      */
-
     public function tags()
     {
         $this->endpoint .= '/addTags';
