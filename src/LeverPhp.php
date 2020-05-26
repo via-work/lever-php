@@ -177,7 +177,6 @@ class LeverPhp
             return $response['data'];
         }
 
-
         return LazyCollection::make(function () use ($response, $endpoint, $options) {
             do {
                 foreach ($response['data'] as $item) {
