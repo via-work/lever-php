@@ -177,7 +177,6 @@ class LeverPhp
             return $response['data'];
         }
 
-
         return LazyCollection::make(function () use ($response, $endpoint, $options) {
             do {
                 foreach ($response['data'] as $item) {
@@ -398,10 +397,9 @@ class LeverPhp
     }
 
     /**
-     * url to add opportunity tags
+     * url to add opportunity tags.
      * @return $this
      */
-
     public function tags()
     {
         $this->endpoint .= '/addTags';
