@@ -28,7 +28,7 @@
         "graham-campbell/guzzle-factory": "^3.0",
         "guzzlehttp/guzzle": "^6.5",
         "illuminate/support": "^8.0",
-        "spatie/guzzle-rate-limiter-middleware": "^1.0"
+        "spatie/guzzle-rate-limiter-middleware": "^2.0"
     },
     "require-dev": {
         "orchestra/testbench": "^6.0",
