@@ -25,8 +25,8 @@
     "require": {
         "php": "^7.3",
         "ext-json": "*",
-        "graham-campbell/guzzle-factory": "^3.0",
-        "guzzlehttp/guzzle": "^6.5",
+        "graham-campbell/guzzle-factory": "^4.0",
+        "guzzlehttp/guzzle": "^7.2",
         "illuminate/support": "^8.0",
         "spatie/guzzle-rate-limiter-middleware": "^2.0"
     },
